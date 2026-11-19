@@ -1,0 +1,2541 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Which Block Is 34? | LPU Smart Navigator &amp; ₹15 Golf Cart Pass</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans, Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Leaflet.js CSS & JS (Real Interactive Map Engine) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <!-- Lucide Icons -->
+     
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        lpu: {
+                            orange: '#F97316',
+                            darkOrange: '#EA580C',
+                            lightOrange: '#FFF7ED',
+                            navy: '#0F172A',
+                            slate: '#334155'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar & Map Styling */
+        ::-webkit-scrollbar { width: 7px; height: 7px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        h1, h2, h3, .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        #lpu-leaflet-map {
+            height: 440px;
+            width: 100%;
+            z-index: 10;
+        }
+        @media (min-width: 1024px) {
+            #lpu-leaflet-map { height: 500px; }
+        }
+        .leaflet-popup-content-wrapper {
+            border-radius: 16px !important;
+            box-shadow: 0 12px 28px -5px rgba(15, 23, 42, 0.2) !important;
+            border: 1px solid #E2E8F0;
+        }
+        .leaflet-popup-content {
+            margin: 12px 14px !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+        .custom-div-icon {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        @keyframes pulse-gps {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 14px rgba(37, 99, 235, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+        .gps-pulse-dot { animation: pulse-gps 2s infinite; }
+
+        @keyframes ticket-shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .ticket-verified-strip {
+            background: linear-gradient(90deg, #059669 0%, #10B981 50%, #059669 100%);
+            background-size: 200% 100%;
+            animation: ticket-shimmer 3s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased selection:bg-orange-100 selection:text-orange-900">
+
+    <!-- =====================================================================
+         STICKY TOP NAVIGATION BAR
+    ====================================================================== -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+            <!-- Brand Identity -->
+            <a href="#" class="flex items-center gap-3 group focus:outline-none">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white flex items-center justify-center shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform">
+                    <i data-lucide="compass" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-display font-extrabold text-lg sm:text-xl tracking-tight text-slate-900"> <span class="text-orange-600"></span></span>
+                    </div>
+                    <p class="text-[11px] font-medium text-slate-500 -mt-0.5 hidden sm:block">LPU Smart Wayfinder &amp; Eco-Cart Shuttle</p>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-600">
+                <a href="#route-planner" class="hover:text-orange-600 transition-colors">Route Finder</a>
+                <a href="#navigation-results" class="hover:text-orange-600 transition-colors">Live Map &amp; Cart</a>
+                <a href="#block-directory" class="hover:text-orange-600 transition-colors">Campus Directory</a>
+                <a href="#qr-concept" class="hover:text-orange-600 transition-colors">QR Signboards</a>
+            </nav>
+
+            <!-- Live Shuttle Pill + My Cart Passes + QR Scan -->
+            <div class="flex items-center gap-2 sm:gap-2.5">
+                <!-- UniHospital Cart Status Pill -->
+                <button onclick="openCartBookingModal()" class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-bold transition-colors" title="Book Electric Golf Cart from UniHospital">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span>UniHospital Cart Hub: Active &bull; ₹15/ride</span>
+                </button>
+
+                <!-- My Cart Passes Wallet Button -->
+                <button onclick="openPassesDrawer()" class="relative inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 text-xs sm:text-sm font-bold transition-all active:scale-95">
+                    <i data-lucide="ticket" class="w-4 h-4 text-orange-600"></i>
+                    <span>My Passes</span>
+                    <span id="header-pass-count" class="ml-0.5 px-1.5 py-0.2 rounded-full bg-orange-600 text-white font-mono text-[11px] font-bold">0</span>
+                </button>
+
+                <!-- QR Pole Simulator Button -->
+                <button onclick="openQrModal()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold shadow-sm transition-all active:scale-95">
+                    <i data-lucide="qr-code" class="w-4 h-4 text-orange-400"></i>
+                    <span class="hidden sm:inline">QR Simulator</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- =====================================================================
+         HERO & SMART ROUTE + CART PLANNER
+    ====================================================================== -->
+    <section id="route-planner" class="relative bg-gradient-to-b from-orange-50/80 via-white to-slate-50 pt-7 pb-10 sm:pt-10 sm:pb-14 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Header Copy -->
+            <div class="max-w-3xl mx-auto text-center mb-7">
+                <div class="inline-flex flex-wrap items-center justify-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 shadow-xs text-slate-700 text-xs font-bold mb-3.5">
+                    <span class="flex items-center gap-1 text-emerald-700">
+                        <i data-lucide="zap" class="w-3.5 h-3.5 fill-emerald-500 text-emerald-600"></i>
+                        UniHospital E-Carts ₹15
+                    </span>
+                    <span class="text-slate-300">|</span>
+                    <span class="flex items-center gap-1 text-indigo-700">
+                        <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+                        Live OSM + OSRM Routing
+                    </span>
+                </div>
+                <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                    CAMPUS <span class="text-orange-600">NAVIGATION</span>
+                    <!-- , decode rooms &amp; hop on a <span class="text-emerald-600">₹15 E-Cart</span>. -->
+                </h1>
+                <p class="mt-3 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
+                    Built for LPU newcomers, parents, and delivery partners. Get turn-by-turn campus paths, floor/wing room breakdowns, and instant Golf Cart passes from <strong>UniHospital</strong>.
+                </p>
+            </div>
+
+            <!-- Persona Switcher Tabs -->
+            <div class="max-w-4xl mx-auto mb-5">
+                <div class="flex flex-wrap items-center justify-center gap-2" role="tablist">
+                    <button onclick="setUserRole('student')" id="role-btn-student" class="role-tab flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-slate-900 text-white shadow-sm">
+                        <i data-lucide="graduation-cap" class="w-4 h-4 text-orange-400"></i>
+                        <span>New Student</span>
+                    </button>
+                    <button onclick="setUserRole('parent')" id="role-btn-parent" class="role-tab flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-slate-700 border border-slate-200 hover:border-orange-300">
+                        <i data-lucide="users" class="w-4 h-4 text-orange-500"></i>
+                        <span>Parent / Visitor</span>
+                    </button>
+                    <!-- <button onclick="setUserRole('delivery')" id="role-btn-delivery" class="role-tab flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-slate-700 border border-slate-200 hover:border-orange-300">
+                        <i data-lucide="package" class="w-4 h-4 text-orange-500"></i>
+                        <span>Delivery Partner</span>
+                    </button> -->
+                </div>
+
+                <!-- Dynamic Persona Tip Strip -->
+                <div class="mt-3 bg-white border border-slate-200/90 rounded-2xl p-3 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shadow-xs">
+                    <div class="flex items-start sm:items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        </div>
+                        <!-- <p id="role-tip-text" class="text-xs sm:text-sm text-slate-700">
+                            <strong class="text-slate-900">Student Tip:</strong> Walking from <strong>UniHospital</strong> to <strong>Block 34</strong> or Hostels? Take the <strong>₹15 Electric Golf Cart</strong> from the UniHospital Stand to save 12+ minutes!
+                        </p> -->
+                    </div>
+                    <button id="role-quick-action" onclick="applyRolePreset()" class="shrink-0 self-start sm:self-auto text-xs font-bold text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-lg transition-colors">
+                        Try UniHospital &rarr; Block 34
+                    </button>
+                </div>
+            </div>
+
+            <!-- MAIN ROUTE SEARCH CARD -->
+            <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200 p-5 sm:p-7">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                    
+                    <!-- Starting Point Selector -->
+                    <div class="md:col-span-5">
+                        <label for="origin-select" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                                1. Starting Gate / Hub
+                            </span>
+                            <span id="qr-badge-indicator" class="hidden text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">QR Locked</span>
+                        </label>
+                        <div class="relative">
+                            <select id="origin-select" onchange="handleOriginChange()" class="w-full appearance-none bg-slate-50 hover:bg-slate-100/80 border-2 border-slate-200 focus:border-orange-500 focus:bg-white rounded-2xl py-3.5 pl-4 pr-10 text-sm font-semibold text-slate-900 outline-none transition-all cursor-pointer">
+                                <!-- Populated via JS -->
+                            </select>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    <!-- Destination Search Input -->
+                    <div class="md:col-span-5 relative">
+                        <label for="destination-input" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-orange-600 inline-block"></span>
+                                2. Block, Dept, or Room Code
+                            </span>
+                            <span class="text-[10px] text-indigo-600 font-bold">e.g. 34-204</span>
+                        </label>
+                        <div class="relative">
+                            <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                            <input 
+                                type="text" 
+                                id="destination-input" 
+                                autocomplete="off"
+                                placeholder="Block 34, 34-204, Library, Block 38..." 
+                                oninput="handleDestinationInput()"
+                                onfocus="showAutocomplete()"
+                                class="w-full bg-slate-50 focus:bg-white border-2 border-slate-200 focus:border-orange-500 rounded-2xl py-3.5 pl-11 pr-10 text-sm font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-normal outline-none transition-all"
+                            >
+                            <button id="clear-dest-btn" onclick="clearDestinationInput()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1" title="Clear">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+
+                        <!-- Autocomplete Dropdown -->
+                        <div id="autocomplete-dropdown" class="hidden absolute left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-200 max-h-80 overflow-y-auto z-30 divide-y divide-slate-100">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Search Button -->
+                    <div class="md:col-span-2">
+                        <button onclick="executeRouteSearch(true)" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3.5 px-4 rounded-2xl shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition-all active:scale-95 text-sm">
+                            <span>Find</span>
+                            <i data-lucide="navigation" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Popular Chips -->
+                <div class="mt-4 pt-3.5 border-t border-slate-100 flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">Popular:</span>
+                    <button onclick="quickSelectDestination('block_34', '34-204')" class="px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 text-xs font-bold transition-colors flex items-center gap-1.5">
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-orange-500 text-orange-500"></i>
+                        Block 34 (Room 34-204)
+                    </button>
+                    <button onclick="quickSelectDestination('block_38', '38-412')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200/70 text-slate-700 text-xs font-semibold transition-colors">
+                        Block 38 &bull; Engg
+                    </button>
+                    <button onclick="quickSelectDestination('central_library')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200/70 text-slate-700 text-xs font-semibold transition-colors">
+                        Central Library
+                    </button>
+                    <button onclick="quickSelectDestination('block_30')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200/70 text-slate-700 text-xs font-semibold transition-colors">
+                        Block 30 &bull; Admissions
+                    </button>
+                    <button onclick="quickSelectDestination('bh_zone')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200/70 text-slate-700 text-xs font-semibold transition-colors">
+                        Boys Hostel Zone
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         ACTIVE NAVIGATION RESULTS + INTELLIGENT GOLF CART RECOMMENDATION
+    ====================================================================== -->
+    <section id="navigation-results" class="py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        
+        <!-- 1. INTELLIGENT UNIHOSPITAL GOLF CART RECOMMENDATION BANNER -->
+        <div id="golf-cart-recommendation-card" class="bg-gradient-to-r from-emerald-900 via-slate-900 to-indigo-950 text-white rounded-3xl p-5 sm:p-7 shadow-xl border border-emerald-500/30 relative overflow-hidden">
+            <!-- Subtle decorative grid glow -->
+            <div class="absolute -right-12 -top-12 w-56 h-56 rounded-full bg-emerald-500/15 blur-2xl pointer-events-none"></div>
+
+            <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div class="space-y-2.5 max-w-2xl">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span id="cart-rec-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500 text-slate-950 font-extrabold text-xs uppercase tracking-wider">
+                            <i data-lucide="zap" class="w-3.5 h-3.5 fill-slate-950"></i>
+                            Smart Shuttle Recommended
+                        </span>
+                        <span class="px-2.5 py-1 rounded-full bg-white/10 text-emerald-200 font-mono text-xs font-semibold">
+                            Starts at UniHospital Hub &bull; ₹15 Flat Fare
+                        </span>
+                    </div>
+
+                    <h2 class="font-display text-xl sm:text-2xl font-extrabold text-white" id="cart-rec-headline">
+                        Skip the 14-min walk! Take the UniHospital Electric Golf Cart to Block 34.
+                    </h2>
+
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed" id="cart-rec-subtext">
+                        LPU Eco-Carts depart every <strong>3–4 minutes</strong> from the <strong>UniHospital Main Cart Stand</strong>. Ideal when carrying bags, rushing for 9:00 AM attendance, or visiting with parents.
+                    </p>
+
+                    <!-- Multimodal Leg Breakdown Pill -->
+                    <div id="cart-multimodal-strip" class="inline-flex flex-wrap items-center gap-2 bg-white/10 border border-white/15 rounded-xl px-3.5 py-2 text-xs text-emerald-100">
+                        <i data-lucide="git-commit-horizontal" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                        <span id="cart-multimodal-text">Direct boarding at UniHospital Cart Hub &rarr; Express Drop at Block 34 Plaza</span>
+                    </div>
+                </div>
+
+                <!-- Side-by-Side Mode Comparison + Instant ₹15 Ticket CTA -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+                    <!-- Walk Option Box -->
+                    <div class="bg-white/10 border border-white/15 rounded-2xl px-4 py-3 text-center min-w-[115px]">
+                        <div class="text-[11px] font-bold uppercase text-slate-300 flex items-center justify-center gap-1">
+                            <i data-lucide="footprints" class="w-3.5 h-3.5"></i> On Foot
+                        </div>
+                        <div class="text-lg sm:text-xl font-extrabold text-white mt-0.5" id="comp-walk-time">14 min</div>
+                        <div class="text-[11px] text-slate-300 font-mono" id="comp-walk-dist">1,120 m &bull; Free</div>
+                    </div>
+
+                    <!-- Golf Cart Option Box -->
+                    <div class="bg-emerald-500/20 border-2 border-emerald-400 rounded-2xl px-4 py-3 text-center min-w-[125px]">
+                        <div class="text-[11px] font-extrabold uppercase text-emerald-300 flex items-center justify-center gap-1">
+                            <i data-lucide="car-front" class="w-3.5 h-3.5"></i> E-Golf Cart
+                        </div>
+                        <div class="text-lg sm:text-xl font-extrabold text-emerald-300 mt-0.5" id="comp-cart-time">4 min</div>
+                        <div class="text-[11px] text-white font-mono font-bold">₹15 / seat</div>
+                    </div>
+
+                    <!-- Primary Buy Cart Ticket Button -->
+                    <button onclick="openCartBookingModal()" class="px-5 py-4 rounded-2xl bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-300 hover:to-emerald-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-emerald-500/25 flex flex-col items-center justify-center transition-all active:scale-95">
+                        <span class="flex items-center gap-1.5">
+                            <i data-lucide="ticket" class="w-4 h-4"></i>
+                            Book Cart Pass
+                        </span>
+                        <span class="text-[11px] font-mono font-bold opacity-85 mt-0.5">Instant QR &bull; ₹15</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. ROUTE SUMMARY HEADER BAR -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-5 sm:p-6">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+                <div class="space-y-1.5">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="px-2.5 py-1 rounded-lg bg-orange-100 text-orange-800 font-mono text-xs font-bold" id="res-block-badge">BLOCK 34</span>
+                        <span id="res-routing-engine-badge" class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-semibold flex items-center gap-1">
+                            <i data-lucide="route" class="w-3.5 h-3.5"></i>
+                            OSRM Live Road Network
+                        </span>
+                        <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold flex items-center gap-1" id="res-access-badge">
+                            <i data-lucide="accessibility" class="w-3.5 h-3.5 text-emerald-600"></i>
+                            Ramp &amp; Elevator Access
+                        </span>
+                    </div>
+                    <h2 class="font-display text-xl sm:text-2xl font-extrabold text-slate-900" id="res-dest-title">
+                        Block 34 — School of Computer Applications (CSE/IT)
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-600 flex flex-wrap items-center gap-2">
+                        <span class="font-semibold text-slate-800" id="res-origin-name">UniHospital Cart Stand</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-orange-500"></i>
+                        <span class="font-semibold text-orange-700" id="res-dest-short">Block 34</span>
+                        <span class="text-slate-300">&bull;</span>
+                        <span id="res-landmark-cue" class="text-slate-600">Landmark: Central Academic Avenue</span>
+                    </p>
+                </div>
+
+                <!-- Share & Quick Cart Actions -->
+                <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+                    <button onclick="copyDirectionsToClipboard()" class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm shadow-xs transition-all active:scale-95">
+                        <i data-lucide="share-2" class="w-4 h-4 text-orange-400"></i>
+                        <span>Copy for WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. INTERACTIVE REAL LEAFLET MAP (7 Cols) + TURN-BY-TURN & ROOM DECODER (5 Cols) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
+            
+            <!-- LEFT COLUMN: Leaflet Map + Room Decoder + API Telemetry -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+                    <!-- Map Toolbar -->
+                    <div class="px-4 sm:px-5 py-3.5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2 bg-slate-50/80">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="map-pinned" class="w-5 h-5 text-orange-600"></i>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm leading-none">Live LPU Campus Map</h3>
+                                <span class="text-[11px] text-slate-500 font-mono">31.2554° N, 75.7058° E</span>
+                            </div>
+                        </div>
+
+                        <!-- Map Controls -->
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <button onclick="focusUniHospitalHub()" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-all" title="Jump to UniHospital Golf Cart Stand">
+                                <i data-lucide="car-front" class="w-3.5 h-3.5"></i>
+                                <span>UniHospital Hub</span>
+                            </button>
+                            <button onclick="locateUserGps()" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-all" title="Use Device GPS">
+                                <i data-lucide="crosshair" class="w-3.5 h-3.5"></i>
+                                <span>My GPS</span>
+                            </button>
+                            <button onclick="toggleMapTileLayer()" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold transition-colors">
+                                <i data-lucide="layers" class="w-3.5 h-3.5 text-orange-600"></i>
+                                <!-- <span id="layer-toggle-label"></span> -->
+                            </button>
+                            <button onclick="toggleOsmBuildingsLayer()" id="osm-buildings-toggle-btn" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-xs font-bold transition-colors">
+                                <i data-lucide="building-2" class="w-3.5 h-3.5"></i>
+                                <span>OSM (<span id="osm-poi-count">0</span>)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Real Leaflet Canvas -->
+                    <div class="relative">
+                        <div id="lpu-leaflet-map"></div>
+
+                        <div id="map-route-loader" class="hidden absolute top-3 left-1/2 -translate-x-1/2 z-20 bg-slate-900/90 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg flex items-center gap-2 backdrop-blur-xs">
+                            <span class="w-3 h-3 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></span>
+                            <span>Fetching live OSRM campus route...</span>
+                        </div>
+
+                        <button onclick="recenterCampusMap()" class="absolute bottom-4 left-4 z-20 bg-white/95 hover:bg-white text-slate-800 border border-slate-300 px-3 py-1.5 rounded-xl shadow-md text-xs font-bold flex items-center gap-1.5 transition-all">
+                            <i data-lucide="maximize-2" class="w-3.5 h-3.5 text-orange-600"></i>
+                            <span>Fit Route</span>
+                        </button>
+                    </div>
+
+                    <!-- Map Legend & API Telemetry Toggle -->
+                    <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
+                        <div class="flex flex-wrap items-center gap-3.5">
+                            <span class="flex items-center gap-1.5 font-medium">
+                                <span class="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span> UniHospital Cart Hub / Gates
+                            </span>
+                            <span class="flex items-center gap-1.5 font-medium">
+                                <span class="w-4 h-1 bg-orange-600 inline-block rounded"></span> Walk Path
+                            </span>
+                            <span class="flex items-center gap-1.5 font-medium">
+                                <span class="w-4 h-1 border-b-2 border-dashed border-emerald-600 inline-block"></span> E-Cart Route
+                            </span>
+                        </div>
+                        <button onclick="toggleApiInspector()" class="text-xs font-bold text-indigo-700 hover:text-indigo-800 flex items-center gap-1 underline underline-offset-2">
+                            <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+                            <span>API &amp; Fetch JSON</span>
+                        </button>
+                    </div>
+
+                    <!-- Collapsible Developer API & Fetch Telemetry Drawer -->
+                    <div id="api-inspector-drawer" class="hidden bg-slate-950 text-slate-200 border-t border-slate-800 p-4 sm:p-5">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[11px] font-bold">LIVE FETCH() TELEMETRY</span>
+                                <span id="api-latency-badge" class="text-xs font-mono text-amber-300">Latency: -- ms</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="switchInspectorTab('osrm')" id="insp-tab-osrm" class="px-2.5 py-1 rounded-lg bg-orange-600 text-white font-mono text-xs font-bold">OSRM Route</button>
+                                <button onclick="switchInspectorTab('overpass')" id="insp-tab-overpass" class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-mono text-xs font-bold">Overpass OSM</button>
+                                <button onclick="toggleApiInspector(false)" class="p-1 text-slate-400 hover:text-white">
+                                    <i data-lucide="x" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-[11px] font-mono text-sky-400 mb-2 truncate" id="inspector-endpoint-url">
+                            GET https://router.project-osrm.org/route/v1/...
+                        </div>
+                        <pre id="inspector-json-output" class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-[11px] font-mono text-emerald-300 overflow-x-auto max-h-48 leading-relaxed">{ "status": "Ready" }</pre>
+                    </div>
+                </div>
+
+                <!-- INSIDE-BLOCK ROOM DECODER CARD -->
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-5 sm:p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-orange-600">Inside-Building Wayfinder</span>
+                            <h3 class="font-display font-extrabold text-lg text-slate-900 flex items-center gap-2 mt-0.5">
+                                <i data-lucide="door-open" class="w-5 h-5 text-orange-600"></i>
+                                <span><span id="room-helper-block-label">Block 34</span> Room &amp; Floor Decoder</span>
+                            </h3>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="text" id="room-code-input" placeholder="e.g. 34-204" oninput="decodeRoomLocation()" class="w-32 sm:w-36 bg-slate-50 border-2 border-slate-200 focus:border-orange-500 focus:bg-white rounded-xl px-3 py-2 text-sm font-mono font-bold text-slate-900 outline-none">
+                            <button onclick="decodeRoomLocation()" class="px-3.5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors">
+                                Decode
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="room-decoded-card" class="bg-orange-50/70 rounded-2xl p-4 border border-orange-200/80 grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                        <div class="sm:col-span-2 flex sm:flex-col items-center justify-center bg-white rounded-xl p-2.5 border border-orange-200 text-center">
+                            <span class="text-[10px] font-bold uppercase text-slate-400">Floor</span>
+                            <span class="font-mono font-extrabold text-lg text-orange-600" id="room-floor-badge">2F</span>
+                        </div>
+                        <div class="sm:col-span-10 space-y-1 text-xs sm:text-sm text-slate-700" id="room-decoded-text">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Step-by-Step Navigation Guide -->
+            <div class="lg:col-span-5 bg-white rounded-3xl border border-slate-200 shadow-xs p-5 sm:p-7">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="font-display font-extrabold text-lg text-slate-900 flex items-center gap-2">
+                            <i data-lucide="footprints" class="w-5 h-5 text-orange-600"></i>
+                            <span>Turn-by-Turn Directions</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-0.5" id="steps-subtitle">Live road route + campus landmark cues</p>
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700" id="step-count-badge">-- Steps</span>
+                </div>
+
+                <!-- Route Mode Toggle inside Steps Panel -->
+                <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl mb-5">
+                    <button onclick="setStepsViewMode('cart')" id="steps-mode-cart" class="py-2 px-3 rounded-lg text-xs font-bold bg-white text-emerald-700 shadow-xs flex items-center justify-center gap-1.5 transition-all">
+                        <i data-lucide="car-front" class="w-3.5 h-3.5"></i>
+                        <span>E-Cart Route (₹15)</span>
+                    </button>
+                    <button onclick="setStepsViewMode('walk')" id="steps-mode-walk" class="py-2 px-3 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition-all">
+                        <i data-lucide="footprints" class="w-3.5 h-3.5"></i>
+                        <span>Walking Path</span>
+                    </button>
+                </div>
+
+                <!-- Ordered Steps List -->
+                <ol id="directions-steps-list" class="space-y-3.5 max-h-[520px] overflow-y-auto pr-1">
+                    <!-- Populated via JS -->
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         SEARCHABLE CAMPUS BLOCKS & SHUTTLE DIRECTORY
+    ====================================================================== -->
+    <section id="block-directory" class="py-12 sm:py-16 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-orange-600">Campus Directory &amp; E-Cart Stops</span>
+                    <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Explore LPU Blocks &amp; Shuttle Hubs</h2>
+                    <p class="text-sm text-slate-600 mt-1">Navigate on foot or book a ₹15 Golf Cart ride directly from UniHospital to any destination.</p>
+                </div>
+
+                <div class="relative w-full md:w-80">
+                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                    <input 
+                        type="text" 
+                        id="directory-search-input" 
+                        oninput="renderDirectoryCards()" 
+                        placeholder="Search Block 34, Library, Hospital..." 
+                        class="w-full bg-slate-50 border border-slate-200 focus:border-orange-500 focus:bg-white rounded-xl py-2.5 pl-10 pr-4 text-sm text-slate-900 outline-none transition-all"
+                    >
+                </div>
+            </div>
+
+            <!-- Category Filter Pills -->
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-3 mb-6">
+                <button onclick="setDirectoryCategory('all')" data-cat="all" class="dir-cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-900 text-white whitespace-nowrap transition-all">
+                    All Campus Hubs
+                </button>
+                <button onclick="setDirectoryCategory('academic')" data-cat="academic" class="dir-cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 whitespace-nowrap transition-all">
+                    Academic Blocks
+                </button>
+                <button onclick="setDirectoryCategory('shuttle')" data-cat="shuttle" class="dir-cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 whitespace-nowrap transition-all">
+                    UniHospital &amp; Cart Stops
+                </button>
+                <button onclick="setDirectoryCategory('admin')" data-cat="admin" class="dir-cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 whitespace-nowrap transition-all">
+                    Admissions &amp; Auditorium
+                </button>
+                <button onclick="setDirectoryCategory('hostel')" data-cat="hostel" class="dir-cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 whitespace-nowrap transition-all">
+                    Hostels &amp; Food Hubs
+                </button>
+                <button onclick="setDirectoryCategory('osm')" data-cat="osm" class="dir-cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-50 text-indigo-800 border border-indigo-200 hover:bg-indigo-100 whitespace-nowrap transition-all">
+                    Live OSM POIs
+                </button>
+            </div>
+
+            <!-- Directory Cards Grid -->
+            <div id="directory-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Populated via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         QR POLE DEEP-LINK & SIGNBOARD CONCEPT SECTION
+    ====================================================================== -->
+    <section id="qr-concept" class="py-12 sm:py-16 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                <div class="lg:col-span-7 space-y-5">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/30 text-xs font-bold">
+                        <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                        <span>Smart Campus QR Pole Deep-Linking</span>
+                    </div>
+                    <h2 class="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
+                        Scan any campus <span class="text-orange-400">QR Pole</span> to auto-set your location &amp; book a cart.
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Physical signboards at <strong>UniHospital Cart Stand</strong>, <strong>Main Gate (NH-44)</strong>, and hostel junctions encode deep-link query URLs like <code class="text-emerald-300 bg-slate-800 px-2 py-0.5 rounded font-mono text-xs">?from=unihospital&amp;to=block_34</code>. Scanning opens the exact route immediately with zero app installation.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="openQrModal()" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm shadow-lg shadow-orange-500/20 transition-all active:scale-95">
+                            <i data-lucide="scan-line" class="w-5 h-5"></i>
+                            <span>Open QR Pole Simulator &amp; Link Generator</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sample UniHospital QR Signboard -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="w-full max-w-sm bg-white text-slate-900 rounded-3xl p-6 shadow-2xl border-4 border-emerald-500">
+                        <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-4">
+                            <div>
+                                <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-700">LPU Eco-Cart Hub #01</span>
+                                <h3 class="font-extrabold text-lg text-slate-900">UniHospital Cart Stand</h3>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-lg bg-emerald-100 font-mono text-xs font-extrabold text-emerald-800">₹15 / RIDE</span>
+                        </div>
+                        <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl p-4 flex flex-col items-center justify-center">
+                            <svg class="w-36 h-36 text-slate-900" viewBox="0 0 100 100" fill="currentColor">
+                                <path d="M10,10 h25 v25 h-25 z M15,15 v15 h15 v-15 z M19,19 h7 v7 h-7 z"/>
+                                <path d="M65,10 h25 v25 h-25 z M70,15 v15 h15 v-15 z M74,19 h7 v7 h-7 z"/>
+                                <path d="M10,65 h25 v25 h-25 z M15,70 v15 h15 v-15 z M19,74 h7 v7 h-7 z"/>
+                                <rect x="42" y="12" width="6" height="6"/><rect x="52" y="12" width="6" height="6"/>
+                                <rect x="42" y="24" width="6" height="12"/><rect x="54" y="28" width="6" height="6"/>
+                                <rect x="12" y="42" width="12" height="6"/><rect x="30" y="42" width="6" height="12"/>
+                                <rect x="44" y="44" width="12" height="12" fill="#059669"/>
+                                <rect x="64" y="42" width="12" height="6"/><rect x="82" y="42" width="8" height="12"/>
+                                <rect x="42" y="64" width="6" height="12"/><rect x="54" y="64" width="12" height="6"/>
+                                <rect x="72" y="64" width="6" height="14"/><rect x="84" y="64" width="6" height="6"/>
+                            </svg>
+                            <span class="mt-2.5 font-mono text-[11px] font-bold text-slate-600">?from=unihospital&amp;to=block_34</span>
+                        </div>
+                        <button onclick="openCartBookingModal('unihospital', 'block_34')" class="mt-4 w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors">
+                            Book ₹15 Cart from UniHospital &rarr;
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         FOOTER WITH HONEST PROJECT ATTRIBUTION
+    ====================================================================== -->
+    <footer class="bg-slate-950 text-slate-400 py-9 border-t border-slate-800 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="space-y-1.5 max-w-3xl">
+                <div class="flex items-center gap-2 text-white font-bold text-sm">
+                    <i data-lucide="compass" class="w-4 h-4 text-orange-500"></i>
+                    <span>Which Block Is 34? — LPU Campus Navigator &amp; Eco-Cart Shuttle</span>
+                </div>
+                <p class="text-slate-400 leading-relaxed">
+                    Base map tiles and road geometries use live <strong>OpenStreetMap</strong>, <strong>Overpass API</strong>, and <strong>OSRM</strong> services centered on Lovely Professional University (31.2554° N, 75.7058° E). Campus block coordinates, indoor room layouts, and ₹15 UniHospital golf cart pass bookings are illustrative project features and not affiliated with official LPU systems.
+                </p>
+            </div>
+            <div class="flex items-center gap-4 shrink-0">
+                <button onclick="toggleApiInspector(true)" class="text-indigo-400 hover:text-indigo-300 font-semibold">Inspect Fetch JSON</button>
+                <a href="#route-planner" class="text-orange-400 hover:text-orange-300 font-semibold">Top &uarr;</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =====================================================================
+         MODAL 1: LPU GOLF CART TICKET BOOKING & DIGITAL QR BOARDING PASS
+    ====================================================================== -->
+    <div id="cart-booking-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto" role="dialog" aria-modal="true">
+        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden my-auto">
+            
+            <!-- Modal Header -->
+            <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                        <i data-lucide="car-front" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display font-extrabold text-base sm:text-lg leading-tight">LPU Eco-Cart Shuttle Pass</h3>
+                        <p class="text-[11px] text-emerald-300 font-mono">UniHospital Electric Buggy Network</p>
+                    </div>
+                </div>
+                <button onclick="closeCartBookingModal()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- STEP A: CONFIGURE RIDE & PAY -->
+            <div id="cart-booking-form-view" class="p-6 space-y-4">
+                <!-- Pickup & Drop Selectors -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Pickup Cart Stand</label>
+                        <select id="cart-pickup-select" onchange="updateCartFareSummary()" class="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-bold text-slate-900 outline-none">
+                            <option value="unihospital">UniHospital Main Hub (Primary)</option>
+                            <option value="main_gate">Main Gate (NH-44) Stand</option>
+                            <option value="gate_1">Gate 1 (Law Gate) Stand</option>
+                            <option value="bh_zone">Boys Hostel Zone Stand</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Drop-off Destination</label>
+                        <select id="cart-dropoff-select" onchange="updateCartFareSummary()" class="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-bold text-slate-900 outline-none">
+                            <!-- Populated via JS -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Ride Type Selector -->
+                <div>
+                    <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1.5">Pass Type</label>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <button type="button" onclick="selectCartPassType('single')" id="pass-type-single" class="p-3 rounded-2xl border-2 border-emerald-500 bg-emerald-50/70 text-left transition-all">
+                            <div class="flex items-center justify-between">
+                                <span class="font-extrabold text-xs sm:text-sm text-slate-900">Single Point Ride</span>
+                                <span class="font-mono font-extrabold text-sm text-emerald-700">₹15</span>
+                            </div>
+                            <p class="text-[11px] text-slate-600 mt-0.5">Direct drop from UniHospital / Stand</p>
+                        </button>
+                        <button type="button" onclick="selectCartPassType('day')" id="pass-type-day" class="p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition-all">
+                            <div class="flex items-center justify-between">
+                                <span class="font-extrabold text-xs sm:text-sm text-slate-900">Day Hopper Pass</span>
+                                <span class="font-mono font-extrabold text-sm text-indigo-700">₹40</span>
+                            </div>
+                            <p class="text-[11px] text-slate-600 mt-0.5">Unlimited campus hops till 8 PM</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Passenger Seat Counter & Rider Name -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Seats (1–4)</label>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="changeCartSeats(-1)" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 font-extrabold text-slate-800">-</button>
+                            <span id="cart-seat-count" class="w-10 text-center font-mono font-extrabold text-base text-slate-900">1</span>
+                            <button type="button" onclick="changeCartSeats(1)" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 font-extrabold text-slate-800">+</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Student Reg. / Name (Optional)</label>
+                        <input type="text" id="cart-rider-name" placeholder="e.g. Aarav (12408912)" class="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 outline-none">
+                    </div>
+                </div>
+
+                <!-- Payment Method Selector -->
+                <div>
+                    <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1.5">Instant Payment Method</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="selectPaymentMethod('upi')" id="pay-method-upi" class="pay-method-btn py-2 px-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-xs text-center">
+                            UPI / GPay
+                        </button>
+                        <button type="button" onclick="selectPaymentMethod('wallet')" id="pay-method-wallet" class="pay-method-btn py-2 px-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 font-semibold text-xs text-center">
+                            LPU Wallet
+                        </button>
+                        <button type="button" onclick="selectPaymentMethod('paytm')" id="pay-method-paytm" class="pay-method-btn py-2 px-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 font-semibold text-xs text-center">
+                            PhonePe / Paytm
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Fare Summary & Pay CTA -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-slate-500">Total Payable Amount</div>
+                        <div class="font-mono font-extrabold text-2xl text-slate-900" id="cart-total-fare">₹15</div>
+                    </div>
+                    <button id="cart-pay-submit-btn" onclick="processCartTicketPayment()" class="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-lg shadow-emerald-600/25 flex items-center gap-2 transition-all active:scale-95">
+                        <i data-lucide="shield-check" class="w-4 h-4"></i>
+                        <span>Pay &amp; Generate Pass</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP B: DIGITAL QR BOARDING PASS RECEIPT -->
+            <div id="cart-ticket-receipt-view" class="hidden p-6">
+                <div class="rounded-3xl border-2 border-emerald-500 bg-white overflow-hidden shadow-lg">
+                    <div class="ticket-verified-strip text-white px-4 py-2 text-center font-mono text-xs font-extrabold tracking-wider uppercase">
+                        Active LPU Eco-Cart Boarding Pass &bull; Verified
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <div class="flex items-center justify-between border-b border-dashed border-slate-200 pb-3">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400">Ticket ID</span>
+                                <div class="font-mono font-extrabold text-base text-slate-900" id="receipt-ticket-id">LPU-CART-8492</div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[10px] font-bold uppercase text-slate-400">Valid Boarding Window</span>
+                                <div class="font-mono font-extrabold text-sm text-emerald-600" id="receipt-countdown">14:59</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="bg-slate-50 p-3 rounded-xl">
+                                <span class="text-slate-400 block">Pickup Stand</span>
+                                <strong class="text-slate-900 text-sm" id="receipt-pickup">UniHospital Main Hub</strong>
+                            </div>
+                            <div class="bg-orange-50 p-3 rounded-xl">
+                                <span class="text-orange-600 block">Drop-Off Block</span>
+                                <strong class="text-slate-900 text-sm" id="receipt-dropoff">Block 34</strong>
+                            </div>
+                        </div>
+
+                        <!-- Scannable Boarding QR Graphic -->
+                        <div class="flex items-center gap-4 bg-slate-50 border border-slate-200 rounded-2xl p-3.5">
+                            <svg class="w-20 h-20 text-slate-900 shrink-0" viewBox="0 0 100 100" fill="currentColor">
+                                <path d="M10,10 h25 v25 h-25 z M15,15 v15 h15 v-15 z M19,19 h7 v7 h-7 z"/>
+                                <path d="M65,10 h25 v25 h-25 z M70,15 v15 h15 v-15 z M74,19 h7 v7 h-7 z"/>
+                                <path d="M10,65 h25 v25 h-25 z M15,70 v15 h15 v-15 z M19,74 h7 v7 h-7 z"/>
+                                <rect x="44" y="14" width="12" height="12"/><rect x="44" y="44" width="12" height="12" fill="#059669"/>
+                                <rect x="14" y="44" width="14" height="10"/><rect x="70" y="44" width="16" height="10"/>
+                                <rect x="44" y="70" width="12" height="16"/><rect x="70" y="70" width="16" height="16"/>
+                            </svg>
+                            <div class="space-y-1 text-xs">
+                                <div class="font-bold text-slate-900" id="receipt-meta">1 Seat &bull; Single Ride &bull; Paid ₹15</div>
+                                <p class="text-slate-500">Show this QR pass to the Eco-Cart driver at the <strong>UniHospital Stand</strong>.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 pt-1">
+                            <button onclick="simulateDriverScan()" class="flex-1 py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-colors">
+                                Simulate Driver Scan
+                            </button>
+                            <button onclick="closeCartBookingModal()" class="flex-1 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors">
+                                Done &amp; View Map
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         MODAL 2: SLIDE-OVER "MY CART PASSES" WALLET DRAWER
+    ====================================================================== -->
+    <div id="passes-drawer" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex justify-end" role="dialog" aria-modal="true">
+        <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col justify-between">
+            <div class="p-5 bg-slate-900 text-white flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <i data-lucide="ticket" class="w-5 h-5 text-emerald-400"></i>
+                    <div>
+                        <h3 class="font-display font-extrabold text-base">My Eco-Cart Passes</h3>
+                        <p class="text-[11px] text-slate-400">Saved locally in your browser wallet</p>
+                    </div>
+                </div>
+                <button onclick="closePassesDrawer()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div id="passes-drawer-list" class="p-5 flex-1 overflow-y-auto space-y-3.5 bg-slate-50">
+                <!-- Populated via JS -->
+            </div>
+
+            <div class="p-4 bg-white border-t border-slate-200 flex items-center justify-between gap-3">
+                <button onclick="closePassesDrawer(); openCartBookingModal();" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-md">
+                    + Book New ₹15 Cart Ride
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         MODAL 3: INTERACTIVE QR POLE SIMULATOR & DEEP-LINK GENERATOR
+    ====================================================================== -->
+    <div id="qr-modal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4" role="dialog" aria-modal="true">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
+                        <i data-lucide="qr-code" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display font-extrabold text-lg text-slate-900">QR Pole Scanner &amp; Deep-Link</h3>
+                        <p class="text-xs text-slate-500">Simulate scanning a signboard or copy shareable URL</p>
+                    </div>
+                </div>
+                <button onclick="closeQrModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="my-4 space-y-2.5" id="qr-checkpoints-list">
+                <!-- Populated via JS -->
+            </div>
+
+            <!-- Deep Link Share Box -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-2">
+                <div class="text-[11px] font-bold uppercase text-slate-500">Current Route Deep-Link URL</div>
+                <div class="flex items-center gap-2">
+                    <input type="text" id="qr-deeplink-url" readonly class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 font-mono text-xs text-slate-700 outline-none">
+                    <button onclick="copyDeepLinkUrl()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs">
+                        Copy Link
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         TOAST NOTIFICATION
+    ====================================================================== -->
+    <div id="toast-notification" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl border border-slate-700 flex items-center gap-3 text-sm font-medium max-w-sm">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+            <span id="toast-message">Done!</span>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         APPLICATION JAVASCRIPT ARCHITECTURE
+    ====================================================================== -->
+    <script>
+        /**
+         * 1. CAMPUS_CONFIG
+         * Coordinates centered around Lovely Professional University (31.2554, 75.7058).
+         * Includes UniHospital Golf Cart Stand as the central shuttle hub.
+         */
+        const CAMPUS_CONFIG = {
+            center: [31.2554, 75.7058],
+            defaultZoom: 16,
+            bbox: '31.244,75.692,31.268,75.716',
+            cartFareSingle: 15,
+            cartFareDay: 40,
+
+            gates: [
+                {
+                    id: 'unihospital',
+                    name: 'UniHospital Cart Stand (Main Shuttle Hub)',
+                    shortName: 'UniHospital Stand',
+                    qrCodeLabel: 'Eco-Cart Hub #01 • UniHospital Stand',
+                    lat: 31.2538,
+                    lng: 75.7042,
+                    isCartStand: true,
+                    description: 'Primary LPU Electric Golf Cart boarding hub (₹15 flat fare to academic blocks & hostels).'
+                },
+                {
+                    id: 'main_gate',
+                    name: 'Main Gate — NH-44 Grand Archway',
+                    shortName: 'Main Gate (NH-44)',
+                    qrCodeLabel: 'Pole #01 • Main Gate NH-44',
+                    lat: 31.2512,
+                    lng: 75.7015,
+                    isCartStand: true,
+                    description: 'Primary highway entrance with Visitor Pass Counter & Cart Feeder Stand.'
+                },
+                {
+                    id: 'gate_1',
+                    name: 'Gate 1 — UniHospital & Law Gate Entry',
+                    shortName: 'Gate 1 (Law Gate)',
+                    qrCodeLabel: 'Pole #02 • Gate 1 Entry',
+                    lat: 31.2546,
+                    lng: 75.7022,
+                    isCartStand: false,
+                    description: 'Direct pedestrian access to UniHospital Cart Stand (2-min walk) & Block 30.'
+                },
+                {
+                    id: 'gate_2',
+                    name: 'Gate 2 — North CSE / Block 34 Entry',
+                    shortName: 'Gate 2 (North)',
+                    qrCodeLabel: 'Pole #03 • Gate 2 Turnstile',
+                    lat: 31.2578,
+                    lng: 75.7008,
+                    isCartStand: false,
+                    description: 'North-west entrance closest to Block 34, Block 38 & CSE labs.'
+                },
+                {
+                    id: 'gate_3',
+                    name: 'Gate 3 — BH-1 / Boys Hostel Gate',
+                    shortName: 'Gate 3 (BH-1)',
+                    qrCodeLabel: 'Pole #04 • Boys Hostel Gate',
+                    lat: 31.2584,
+                    lng: 75.7098,
+                    isCartStand: true,
+                    description: 'Residential boys hostel perimeter gate with E-Cart drop/pickup bay.'
+                },
+                {
+                    id: 'gate_4',
+                    name: 'Gate 4 — GH / Girls Hostel Gate',
+                    shortName: 'Gate 4 (GH)',
+                    qrCodeLabel: 'Pole #05 • Girls Hostel Gate',
+                    lat: 31.2524,
+                    lng: 75.7086,
+                    isCartStand: true,
+                    description: 'Girls hostel avenue gate serviced by UniHospital Eco-Carts.'
+                }
+            ],
+
+            blocks: [
+                {
+                    id: 'block_34',
+                    number: '34',
+                    name: 'Block 34 — School of Computer Applications (CSE/IT)',
+                    shortName: 'Block 34',
+                    category: 'academic',
+                    categoryLabel: 'Academic Block',
+                    featured: true,
+                    cartRecommended: true,
+                    lat: 31.2564,
+                    lng: 75.7068,
+                    landmarkCue: 'Central Academic Avenue • Next to Block 33 & UniMall Plaza',
+                    accessibility: 'Step-Free • Ramp & Dual Elevators (A & B)',
+                    departments: ['Computer Applications', 'AI & Cloud Labs', 'Auditorium 34-A', 'Faculty Cabins'],
+                    sampleRooms: ['34-204', '34-101', '34-308', '34-412'],
+                    wingGuide: {
+                        east: 'East Corridor (Rooms 01–12 • Turn left from Elevator A)',
+                        west: 'West Corridor (Rooms 13–24 • Turn right toward Courtyard)'
+                    }
+                },
+                {
+                    id: 'block_38',
+                    number: '38',
+                    name: 'Block 38 — School of Computer Science & Engineering',
+                    shortName: 'Block 38 (CSE)',
+                    category: 'academic',
+                    categoryLabel: 'Academic Block',
+                    featured: false,
+                    cartRecommended: true,
+                    lat: 31.2573,
+                    lng: 75.7076,
+                    landmarkCue: 'North Academic Sector • Beyond Block 34 Plaza',
+                    accessibility: 'Step-Free • High-Speed Lifts',
+                    departments: ['CSE Core Labs', 'iMac & Linux Lab', 'Placement Cell'],
+                    sampleRooms: ['38-412', '38-105', '38-209'],
+                    wingGuide: {
+                        east: 'Coding Labs 1–8',
+                        west: 'Lecture Theatres LT-1 to LT-6'
+                    }
+                },
+                {
+                    id: 'unihospital_dest',
+                    number: 'UH',
+                    name: 'UniHospital & Main Electric Golf Cart Hub',
+                    shortName: 'UniHospital',
+                    category: 'shuttle',
+                    categoryLabel: 'Medical & Cart Hub',
+                    featured: false,
+                    cartRecommended: false,
+                    lat: 31.2538,
+                    lng: 75.7042,
+                    landmarkCue: '24x7 Campus Hospital & Primary ₹15 Golf Cart Boarding Stand',
+                    accessibility: 'Emergency Ramp • Wheelchair & Cart Bay',
+                    departments: ['24x7 OPD & Pharmacy', 'E-Cart Dispatch Desk', 'Ambulance Bay'],
+                    sampleRooms: ['UH-101', 'UH-104'],
+                    wingGuide: {
+                        east: 'OPD Consultation Rooms',
+                        west: 'Outdoor E-Cart Boarding Queue'
+                    }
+                },
+                {
+                    id: 'central_library',
+                    number: 'LIB',
+                    name: 'Central Library & Knowledge Resource Centre',
+                    shortName: 'Central Library',
+                    category: 'academic',
+                    categoryLabel: 'Library & Study',
+                    featured: false,
+                    cartRecommended: true,
+                    lat: 31.2554,
+                    lng: 75.7058,
+                    landmarkCue: 'Heart of Campus • Opposite UniMall Food Court',
+                    accessibility: 'Step-Free • Elevator to All Reading Floors',
+                    departments: ['Digital E-Library', 'Silent Reading Halls', 'Reference Section'],
+                    sampleRooms: ['LIB-201', 'LIB-304'],
+                    wingGuide: {
+                        east: 'Periodicals & Quiet Zone',
+                        west: 'Computer Terminals & Issue Desk'
+                    }
+                },
+                {
+                    id: 'block_30',
+                    number: '30',
+                    name: 'Block 30 — Admissions & Parent Welcome Centre',
+                    shortName: 'Block 30 (Admissions)',
+                    category: 'admin',
+                    categoryLabel: 'Admissions & Admin',
+                    featured: false,
+                    cartRecommended: false,
+                    lat: 31.2528,
+                    lng: 75.7028,
+                    landmarkCue: 'First Major Administrative Complex inside Main Gate (NH-44)',
+                    accessibility: 'Step-Free • Priority Parent Lounge',
+                    departments: ['Admissions Counseling', 'Fee & Scholarship Desk', 'ID Card Cell'],
+                    sampleRooms: ['30-102', '30-108', '30-201'],
+                    wingGuide: {
+                        east: 'Counseling Desks 1–12',
+                        west: 'Document Verification Counters'
+                    }
+                },
+                {
+                    id: 'mittal_auditorium',
+                    number: 'SDA',
+                    name: 'Shanti Devi Mittal Auditorium',
+                    shortName: 'Mittal Auditorium',
+                    category: 'admin',
+                    categoryLabel: 'Events & Convocation',
+                    featured: false,
+                    cartRecommended: true,
+                    lat: 31.2546,
+                    lng: 75.7048,
+                    landmarkCue: 'Grand Auditorium Dome • Adjacent to UniHospital Avenue',
+                    accessibility: 'VIP & Visitor Ramp Access',
+                    departments: ['Main Convention Hall', 'Cultural Affairs', 'VIP Lounge'],
+                    sampleRooms: ['SDA-101'],
+                    wingGuide: {
+                        east: 'Gate A VIP & Faculty Entry',
+                        west: 'Gate B Student & Guest Entry'
+                    }
+                },
+                {
+                    id: 'unimall_food',
+                    number: 'UM',
+                    name: 'UniMall & Food Factory Plaza',
+                    shortName: 'UniMall Plaza',
+                    category: 'hostel',
+                    categoryLabel: 'Shopping & Dining',
+                    featured: false,
+                    cartRecommended: false,
+                    lat: 31.2550,
+                    lng: 75.7053,
+                    landmarkCue: 'Multi-level Campus Mall, ATMs, Bookstore & Dining',
+                    accessibility: 'Escalators & Elevators',
+                    departments: ['Food Court', 'SBI / HDFC ATMs', 'Campus Bookstore', 'Salon'],
+                    sampleRooms: ['UM-102', 'UM-205'],
+                    wingGuide: {
+                        east: 'Food Kiosks & Seating',
+                        west: 'Retail Stores & Banking'
+                    }
+                },
+                {
+                    id: 'bh_zone',
+                    number: 'BH-1',
+                    name: 'Boys Hostel Zone (BH-1 to BH-6) & Cart Drop',
+                    shortName: 'Boys Hostel Zone',
+                    category: 'hostel',
+                    categoryLabel: 'Residential Hostels',
+                    featured: false,
+                    cartRecommended: true,
+                    lat: 31.2582,
+                    lng: 75.7096,
+                    landmarkCue: 'North-East Residential Sector • Popular ₹15 Cart Route from UniHospital',
+                    accessibility: 'Warden Office at Ground Lobby',
+                    departments: ['Warden Desk', 'Night Mess', 'Parcel Locker Bay'],
+                    sampleRooms: ['BH1-210', 'BH4-405'],
+                    wingGuide: {
+                        east: 'A-Wing Rooms',
+                        west: 'B-Wing Rooms'
+                    }
+                },
+                {
+                    id: 'gh_zone',
+                    number: 'GH-1',
+                    name: 'Girls Hostel Zone (GH-1 to GH-5) & Cart Drop',
+                    shortName: 'Girls Hostel Zone',
+                    category: 'hostel',
+                    categoryLabel: 'Residential Hostels',
+                    featured: false,
+                    cartRecommended: true,
+                    lat: 31.2526,
+                    lng: 75.7084,
+                    landmarkCue: 'South-East Residential Avenue • Direct ₹15 Cart Service from UniHospital',
+                    accessibility: '24x7 Security Reception & Lift',
+                    departments: ['Chief Warden Office', 'Dining Hall', 'Medical Room'],
+                    sampleRooms: ['GH1-114', 'GH3-308'],
+                    wingGuide: {
+                        east: 'North Wing Corridors',
+                        west: 'South Wing Corridors'
+                    }
+                }
+            ]
+        };
+
+        for (let i = 1; i <= 58; i++) {
+    const numStr = String(i);
+    const exists = CAMPUS_CONFIG.blocks.some(
+        b => String(b.number) === numStr || b.id === `block_${i}`
+    );
+
+    if (!exists) {
+        CAMPUS_CONFIG.blocks.push({
+            id: `block_${i}`,
+            number: numStr,
+            name: `Block ${i} — Academic Wing`,
+            shortName: `Block ${i}`,
+            category: 'academic',
+            categoryLabel: 'Academic Block',
+            featured: false,
+            cartRecommended: i >= 20,
+            lat: 31.2554 + Math.sin(i) * 0.0075,
+            lng: 75.7058 + Math.cos(i) * 0.0075,
+            landmarkCue: `Campus Academic Sector • Near Block ${i} Avenue`,
+            accessibility: 'Step-Free • Main Entrance & Lift Access',
+            departments: [`Block ${i} Lecture Halls`, 'Faculty Cabins', 'Departmental Labs'],
+            sampleRooms: [`${i}-101`, `${i}-204`, `${i}-308`],
+            wingGuide: {
+                east: `East Wing (Rooms 01–12 • Block ${i})`,
+                west: `West Wing (Rooms 13–24 • Block ${i})`
+            }
+        });
+    }
+}
+
+        /**
+         * 2. CampusApiService — REAL FETCH() INTEGRATIONS
+         */
+        const CampusApiService = {
+            lastOverpassPayload: null,
+            lastOverpassUrl: '',
+            lastOsrmPayload: null,
+            lastOsrmUrl: '',
+            lastLatencyMs: 0,
+
+            async fetchLiveOsmCampusPois() {
+                const query = `
+                    [out:json][timeout:12];
+                    (
+                      node["name"](${CAMPUS_CONFIG.bbox});
+                      way["building"]["name"](${CAMPUS_CONFIG.bbox});
+                      way["amenity"]["name"](${CAMPUS_CONFIG.bbox});
+                    );
+                    out center 35;
+                `;
+                const url = 'https://overpass-api.de/api/interpreter';
+                this.lastOverpassUrl = `POST ${url} (bbox: ${CAMPUS_CONFIG.bbox})`;
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+                        body: 'data=' + encodeURIComponent(query)
+                    });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    const data = await response.json();
+
+                    this.lastOverpassPayload = {
+                        source: 'Live Overpass API (OpenStreetMap)',
+                        elementCount: (data.elements || []).length,
+                        sampleElements: (data.elements || []).slice(0, 6)
+                    };
+
+                    const seen = new Set();
+                    const pois = [];
+                    (data.elements || []).forEach(el => {
+                        const tags = el.tags || {};
+                        const name = tags.name;
+                        const lat = el.lat || (el.center && el.center.lat);
+                        const lng = el.lon || (el.center && el.center.lon);
+                        if (name && lat && lng && !seen.has(name.toLowerCase())) {
+                            seen.add(name.toLowerCase());
+                            const typeTag = tags.amenity || tags.building || tags.shop || 'OSM Place';
+                            pois.push({
+                                id: `osm_${el.id}`,
+                                number: 'OSM',
+                                name: `${name} (Live OSM)`,
+                                shortName: name,
+                                category: 'osm',
+                                categoryLabel: `Live OSM • ${capitalizeWord(typeTag)}`,
+                                isLiveOsm: true,
+                                cartRecommended: true,
+                                lat,
+                                lng,
+                                landmarkCue: `Live OpenStreetMap Feature (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
+                                accessibility: 'Mapped Public Feature',
+                                departments: [capitalizeWord(typeTag), 'OpenStreetMap Live POI'],
+                                sampleRooms: ['N/A'],
+                                wingGuide: { east: 'Public OSM Building', west: 'Check entrance signage' }
+                            });
+                        }
+                    });
+                    return { success: true, pois };
+                } catch (err) {
+                    this.lastOverpassPayload = { source: 'Fallback (Overpass Busy/Offline)', error: err.message };
+                    return { success: false, pois: [] };
+                }
+            },
+
+            async fetchOsrmRoute(originCoords, destCoords, profile = 'foot') {
+                const startTime = performance.now();
+                const coordPair = `${originCoords.lng},${originCoords.lat};${destCoords.lng},${destCoords.lat}`;
+                const url = `https://router.project-osrm.org/route/v1/${profile}/${coordPair}?overview=full&geometries=geojson&steps=true`;
+                this.lastOsrmUrl = `GET ${url}`;
+
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    const data = await response.json();
+                    this.lastLatencyMs = Math.round(performance.now() - startTime);
+
+                    if (data.code !== 'Ok' || !data.routes?.length) throw new Error('No route');
+
+                    const route = data.routes[0];
+                    this.lastOsrmPayload = {
+                        source: `Live OSRM (${profile.toUpperCase()}) API`,
+                        latencyMs: this.lastLatencyMs,
+                        distanceMeters: Math.round(route.distance),
+                        durationSeconds: Math.round(route.duration),
+                        summary: route.legs[0]?.summary || 'Campus Roads',
+                        stepsPreview: (route.legs[0]?.steps || []).slice(0, 3)
+                    };
+
+                    const latLngs = route.geometry.coordinates.map(c => [c[1], c[0]]);
+                    const rawSteps = route.legs[0]?.steps || [];
+                    const formattedSteps = rawSteps
+                        .filter(s => s.distance > 4 || s.maneuver?.type === 'arrive' || s.maneuver?.type === 'depart')
+                        .map((step, idx, arr) => {
+                            const roadName = step.name && step.name.trim() !== '' ? step.name : 'Campus Boulevard';
+                            const distText = step.distance >= 1000
+                                ? `${(step.distance / 1000).toFixed(2)} km`
+                                : `${Math.round(step.distance)} m`;
+                            const instr = buildHumanInstruction(step, roadName, idx === arr.length - 1);
+                            return {
+                                title: instr.title,
+                                detail: instr.detail,
+                                landmark: `${roadName} (${distText})`
+                            };
+                        });
+
+                    return {
+                        isLiveOsrm: true,
+                        distanceMeters: Math.round(route.distance),
+                        durationMins: Math.max(1, Math.round(route.duration / 60)),
+                        latLngs,
+                        steps: formattedSteps
+                    };
+                } catch (err) {
+                    this.lastLatencyMs = Math.round(performance.now() - startTime);
+                    this.lastOsrmPayload = { source: 'Fallback Haversine Vector', error: err.message };
+                    const dist = Math.round(haversineMeters(originCoords, destCoords));
+                    return {
+                        isLiveOsrm: false,
+                        distanceMeters: dist,
+                        durationMins: Math.max(1, Math.ceil(dist / 75)),
+                        latLngs: [[originCoords.lat, originCoords.lng], [destCoords.lat, destCoords.lng]],
+                        steps: [
+                            { title: 'Depart from Starting Gate / Hub', detail: 'Head onto the main paved campus avenue.', landmark: 'Departure Point' },
+                            { title: 'Follow Central Campus Boulevard', detail: `Continue for ~${dist} meters following directional block boards.`, landmark: 'Main Avenue' },
+                            { title: 'Arrive at Target Block', detail: 'Enter via the main accessible porch.', landmark: 'Destination Entrance' }
+                        ]
+                    };
+                }
+            },
+
+            async searchNominatim(query) {
+                const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ' Lovely Professional University')}&limit=3`;
+                try {
+                    const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+                    if (!res.ok) return [];
+                    const results = await res.json();
+                    return results.map(item => ({
+                        id: `nom_${item.place_id}`,
+                        number: 'NOM',
+                        name: `${item.display_name.split(',')[0]} (OSM Geocoded)`,
+                        shortName: item.display_name.split(',')[0],
+                        category: 'osm',
+                        categoryLabel: 'Nominatim Live Result',
+                        isLiveOsm: true,
+                        cartRecommended: true,
+                        lat: parseFloat(item.lat),
+                        lng: parseFloat(item.lon),
+                        landmarkCue: item.display_name,
+                        accessibility: 'Mapped Location',
+                        departments: ['Nominatim Geocoding'],
+                        sampleRooms: ['N/A'],
+                        wingGuide: { east: 'External Location', west: 'Check local signage' }
+                    }));
+                } catch {
+                    return [];
+                }
+            }
+        };
+
+        /**
+         * 3. APPLICATION STATE & STORAGE
+         */
+        let appState = {
+            selectedOriginId: 'unihospital',
+            customGpsOrigin: null,
+            selectedDestId: 'block_34',
+            selectedRoomCode: '34-204',
+            activeRole: 'student',
+            directoryCategory: 'all',
+            stepsViewMode: 'cart', // 'cart' | 'walk'
+            qrVerified: false,
+            liveOsmPois: [],
+            nominatimResults: [],
+            showOsmMarkers: true,
+            activeTileMode: 'street',
+            inspectorTab: 'osrm',
+            lastWalkRoute: null,
+            lastCartRoute: null,
+            // Booking modal state
+            cartPassType: 'single',
+            cartSeats: 1,
+            cartPaymentMethod: 'upi',
+            savedPasses: []
+        };
+
+        let leafletMap, streetTileLayer, satelliteTileLayer;
+        let gatesLayerGroup, blocksLayerGroup, osmPoisLayerGroup, routeLayerGroup, gpsMarker;
+        let currentRouteBounds = null;
+        let countdownInterval = null;
+
+        /**
+         * INITIALIZATION
+         */
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadSavedPassesFromStorage();
+            initLeafletMap();
+            populateOriginDropdown();
+            populateCartDropoffDropdown();
+            populateQrCheckpoints();
+
+            // Support URL Deep Links (?from=unihospital&to=block_34&room=34-204)
+            const params = new URLSearchParams(window.location.search);
+            const fromParam = params.get('from') || params.get('at');
+            const toParam = params.get('to');
+            const roomParam = params.get('room');
+
+            if (fromParam && CAMPUS_CONFIG.gates.some(g => g.id === fromParam)) {
+                appState.selectedOriginId = fromParam;
+                appState.qrVerified = true;
+                document.getElementById('origin-select').value = fromParam;
+                document.getElementById('qr-badge-indicator').classList.remove('hidden');
+            }
+            if (toParam && CAMPUS_CONFIG.blocks.some(b => b.id === toParam)) {
+                appState.selectedDestId = toParam;
+            }
+            if (roomParam) {
+                appState.selectedRoomCode = roomParam.toUpperCase();
+            }
+
+            const initDest = getAllDestinations().find(b => b.id === appState.selectedDestId) || CAMPUS_CONFIG.blocks[0];
+            document.getElementById('destination-input').value = initDest.id === 'block_34'
+                ? `${initDest.shortName} (Room ${appState.selectedRoomCode})`
+                : initDest.name;
+            updateClearButtonVisibility();
+
+            renderMapStaticMarkers();
+            renderDirectoryCards();
+            await executeRouteSearch(false);
+
+            // Background Overpass POI Fetch
+            loadOverpassCampusData();
+
+            document.addEventListener('click', (e) => {
+                const dd = document.getElementById('autocomplete-dropdown');
+                const inp = document.getElementById('destination-input');
+                if (!dd.contains(e.target) && e.target !== inp) dd.classList.add('hidden');
+            });
+
+            lucide.createIcons();
+        });
+
+        /**
+         * LEAFLET MAP SETUP & LAYER CONTROLS
+         */
+        function initLeafletMap() {
+            leafletMap = L.map('lpu-leaflet-map', {
+                center: CAMPUS_CONFIG.center,
+                zoom: CAMPUS_CONFIG.defaultZoom
+            });
+
+            streetTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(leafletMap);
+
+            satelliteTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 19,
+                attribution: 'Tiles &copy; Esri'
+            });
+
+            gatesLayerGroup = L.layerGroup().addTo(leafletMap);
+            blocksLayerGroup = L.layerGroup().addTo(leafletMap);
+            osmPoisLayerGroup = L.layerGroup().addTo(leafletMap);
+            routeLayerGroup = L.layerGroup().addTo(leafletMap);
+        }
+
+        function toggleMapTileLayer() {
+            const label = document.getElementById('layer-toggle-label');
+            if (appState.activeTileMode === 'street') {
+                leafletMap.removeLayer(streetTileLayer);
+                satelliteTileLayer.addTo(leafletMap);
+                appState.activeTileMode = 'satellite';
+                label.textContent = 'Street';
+            } else {
+                leafletMap.removeLayer(satelliteTileLayer);
+                streetTileLayer.addTo(leafletMap);
+                appState.activeTileMode = 'street';
+                label.textContent = 'Satellite';
+            }
+        }
+
+        function toggleOsmBuildingsLayer() {
+            appState.showOsmMarkers = !appState.showOsmMarkers;
+            const btn = document.getElementById('osm-buildings-toggle-btn');
+            if (appState.showOsmMarkers) {
+                osmPoisLayerGroup.addTo(leafletMap);
+                btn.classList.remove('opacity-50');
+            } else {
+                leafletMap.removeLayer(osmPoisLayerGroup);
+                btn.classList.add('opacity-50');
+            }
+        }
+
+        function focusUniHospitalHub() {
+            const uh = CAMPUS_CONFIG.gates.find(g => g.id === 'unihospital');
+            if (!uh) return;
+            leafletMap.setView([uh.lat, uh.lng], 17);
+            appState.selectedOriginId = 'unihospital';
+            appState.customGpsOrigin = null;
+            document.getElementById('origin-select').value = 'unihospital';
+            executeRouteSearch(false);
+            showToast('Centered on UniHospital Golf Cart Stand (₹15/ride)');
+        }
+
+        function renderMapStaticMarkers() {
+            gatesLayerGroup.clearLayers();
+            blocksLayerGroup.clearLayers();
+
+            CAMPUS_CONFIG.gates.forEach(gate => {
+                const isSelected = !appState.customGpsOrigin && gate.id === appState.selectedOriginId;
+                const isUniHosp = gate.id === 'unihospital';
+                const badgeBg = isUniHosp
+                    ? 'bg-emerald-600 ring-4 ring-emerald-400/40'
+                    : (isSelected ? 'bg-emerald-700 ring-4 ring-emerald-400/40' : 'bg-slate-800');
+
+                const marker = L.marker([gate.lat, gate.lng], {
+                    icon: L.divIcon({
+                        className: 'custom-div-icon',
+                        html: `<div class="flex flex-col items-center -translate-x-1/2 -translate-y-1/2">
+                            <div class="px-2.5 py-1 rounded-full ${badgeBg} text-white font-bold text-[10px] shadow-md border-2 border-white whitespace-nowrap">
+                                ${isUniHosp ? '⚡ ' + gate.shortName : gate.shortName}
+                            </div>
+                        </div>`
+                    })
+                });
+
+                marker.bindPopup(`
+                    <div class="space-y-1.5 min-w-[200px]">
+                        <span class="inline-block px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">${isUniHosp ? 'PRIMARY E-CART HUB' : 'CAMPUS GATE'}</span>
+                        <h4 class="font-extrabold text-sm text-slate-900">${gate.name}</h4>
+                        <p class="text-xs text-slate-600">${gate.description}</p>
+                        <div class="flex gap-1.5 pt-1">
+                            <button onclick="selectMapOrigin('${gate.id}')" class="flex-1 py-1.5 px-2.5 rounded-lg bg-slate-900 text-white text-xs font-bold hover:bg-slate-800">Start Here</button>
+                            ${isUniHosp ? `<button onclick="openCartBookingModal('unihospital')" class="flex-1 py-1.5 px-2.5 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700">Book ₹15 Cart</button>` : ''}
+                        </div>
+                    </div>
+                `);
+                marker.addTo(gatesLayerGroup);
+            });
+
+            CAMPUS_CONFIG.blocks.forEach(block => {
+                if (block.id === 'unihospital_dest') return; // Already represented by UniHospital Cart Hub pin
+                const isTarget = block.id === appState.selectedDestId;
+                const marker = L.marker([block.lat, block.lng], {
+                    icon: L.divIcon({
+                        className: 'custom-div-icon',
+                        html: `<div class="flex flex-col items-center -translate-x-1/2 -translate-y-1/2">
+                            <div class="px-2.5 py-1 rounded-xl ${isTarget ? 'bg-orange-600 ring-4 ring-orange-400/50 scale-110' : 'bg-slate-900 hover:bg-orange-600'} text-white font-mono font-extrabold text-[11px] shadow-lg border-2 border-white whitespace-nowrap transition-transform">
+                                ${/^\d+$/.test(block.number) ? 'BLK ' + block.number : block.number}
+                            </div>
+                        </div>`
+                    })
+                });
+
+                marker.bindPopup(`
+                    <div class="space-y-1.5 min-w-[215px]">
+                        <span class="inline-block px-2 py-0.5 rounded bg-orange-100 text-orange-800 text-[10px] font-bold">${block.categoryLabel.toUpperCase()}</span>
+                        <h4 class="font-extrabold text-sm text-slate-900">${block.name}</h4>
+                        <p class="text-xs text-slate-600">${block.landmarkCue}</p>
+                        <div class="flex gap-1.5 pt-1">
+                            <button onclick="quickSelectDestination('${block.id}')" class="flex-1 py-1.5 px-2.5 rounded-lg bg-orange-600 text-white text-xs font-bold hover:bg-orange-700">Navigate</button>
+                            <button onclick="openCartBookingModal('unihospital', '${block.id}')" class="flex-1 py-1.5 px-2.5 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700">₹15 Cart</button>
+                        </div>
+                    </div>
+                `);
+                marker.addTo(blocksLayerGroup);
+            });
+        }
+
+        function renderOsmPoiMarkers() {
+            osmPoisLayerGroup.clearLayers();
+            appState.liveOsmPois.forEach(poi => {
+                const marker = L.marker([poi.lat, poi.lng], {
+                    icon: L.divIcon({
+                        className: 'custom-div-icon',
+                        html: `<div class="w-3.5 h-3.5 rounded-full bg-indigo-500 border-2 border-white shadow-md -translate-x-1/2 -translate-y-1/2" title="${escapeHtml(poi.shortName)}"></div>`
+                    })
+                });
+                marker.bindPopup(`
+                    <div class="space-y-1.5 min-w-[190px]">
+                        <span class="inline-block px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 text-[10px] font-bold">LIVE OSM POI</span>
+                        <h4 class="font-extrabold text-sm text-slate-900">${escapeHtml(poi.shortName)}</h4>
+                        <button onclick="quickSelectDestination('${poi.id}')" class="mt-1 w-full py-1.5 px-3 rounded-lg bg-indigo-600 text-white text-xs font-bold">Route Here</button>
+                    </div>
+                `);
+                marker.addTo(osmPoisLayerGroup);
+            });
+        }
+
+        async function loadOverpassCampusData() {
+            const res = await CampusApiService.fetchLiveOsmCampusPois();
+            updateInspectorDisplay();
+            if (res.success && res.pois.length > 0) {
+                appState.liveOsmPois = res.pois;
+                document.getElementById('osm-poi-count').textContent = res.pois.length;
+                renderOsmPoiMarkers();
+                renderDirectoryCards();
+            }
+        }
+
+        function locateUserGps() {
+            if (!navigator.geolocation) {
+                showToast('Geolocation not supported by browser.');
+                return;
+            }
+            showToast('Acquiring device GPS...');
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const { latitude, longitude } = pos.coords;
+                    appState.customGpsOrigin = {
+                        id: 'live_gps',
+                        name: `My Live GPS (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`,
+                        shortName: 'My Live GPS',
+                        lat: latitude,
+                        lng: longitude
+                    };
+                    const select = document.getElementById('origin-select');
+                    let opt = select.querySelector('option[value="live_gps"]');
+                    if (!opt) {
+                        opt = document.createElement('option');
+                        opt.value = 'live_gps';
+                        select.prepend(opt);
+                    }
+                    opt.textContent = appState.customGpsOrigin.name;
+                    select.value = 'live_gps';
+                    appState.selectedOriginId = 'live_gps';
+
+                    if (gpsMarker) leafletMap.removeLayer(gpsMarker);
+                    gpsMarker = L.marker([latitude, longitude], {
+                        icon: L.divIcon({
+                            className: 'custom-div-icon',
+                            html: `<div class="w-4 h-4 rounded-full bg-blue-600 border-2 border-white gps-pulse-dot -translate-x-1/2 -translate-y-1/2"></div>`
+                        })
+                    }).addTo(leafletMap).bindPopup('<strong>Your Live GPS Location</strong>').openPopup();
+
+                    executeRouteSearch(false);
+                    showToast('Live GPS locked!');
+                },
+                () => showToast('GPS permission denied — select a Gate or UniHospital Stand.'),
+                { enableHighAccuracy: true, timeout: 8000 }
+            );
+        }
+
+        /**
+         * ROUTE SEARCH & UNIHOSPITAL GOLF CART RECOMMENDATION ENGINE
+         */
+        function getAllDestinations() {
+            return [...CAMPUS_CONFIG.blocks, ...appState.liveOsmPois, ...appState.nominatimResults];
+        }
+
+        function getActiveOrigin() {
+            if (appState.selectedOriginId === 'live_gps' && appState.customGpsOrigin) return appState.customGpsOrigin;
+            return CAMPUS_CONFIG.gates.find(g => g.id === appState.selectedOriginId) || CAMPUS_CONFIG.gates[0];
+        }
+
+        function populateOriginDropdown() {
+            const select = document.getElementById('origin-select');
+            select.innerHTML = CAMPUS_CONFIG.gates.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
+            select.value = appState.selectedOriginId;
+        }
+
+        function handleOriginChange() {
+            appState.selectedOriginId = document.getElementById('origin-select').value;
+            if (appState.selectedOriginId !== 'live_gps') appState.customGpsOrigin = null;
+            appState.qrVerified = false;
+            document.getElementById('qr-badge-indicator').classList.add('hidden');
+            renderMapStaticMarkers();
+            executeRouteSearch(false);
+        }
+
+        let nominatimTimer = null;
+        function handleDestinationInput() {
+            updateClearButtonVisibility();
+            showAutocomplete();
+
+            const raw = document.getElementById('destination-input').value.trim();
+            const roomMatch = raw.match(/\b(\d{1,2})-(\d{3})\b/);
+            if (roomMatch) {
+                const matched = CAMPUS_CONFIG.blocks.find(b => b.number === roomMatch[1]);
+                if (matched) {
+                    appState.selectedDestId = matched.id;
+                    appState.selectedRoomCode = roomMatch[0];
+                }
+            }
+
+            clearTimeout(nominatimTimer);
+            if (raw.length >= 4 && !roomMatch) {
+                nominatimTimer = setTimeout(async () => {
+                    const res = await CampusApiService.searchNominatim(raw);
+                    if (res.length) {
+                        appState.nominatimResults = res;
+                        if (!document.getElementById('autocomplete-dropdown').classList.contains('hidden')) showAutocomplete();
+                    }
+                }, 500);
+            }
+        }
+
+        function updateClearButtonVisibility() {
+            const val = document.getElementById('destination-input').value;
+            document.getElementById('clear-dest-btn').classList.toggle('hidden', val.length === 0);
+        }
+
+        function clearDestinationInput() {
+            const inp = document.getElementById('destination-input');
+            inp.value = '';
+            inp.focus();
+            updateClearButtonVisibility();
+            showAutocomplete();
+        }
+
+        function showAutocomplete() {
+            const query = document.getElementById('destination-input').value.toLowerCase().trim();
+            const dropdown = document.getElementById('autocomplete-dropdown');
+            const matches = getAllDestinations().filter(item => {
+                if (!query) return true;
+                return [item.number, `block ${item.number}`, item.name, item.shortName, item.landmarkCue, ...(item.departments || [])]
+                    .join(' ').toLowerCase().includes(query);
+            }).slice(0, 9);
+
+            dropdown.innerHTML = matches.length === 0
+                ? `<div class="p-4 text-center text-xs text-slate-500">No matches for "<strong>${escapeHtml(query)}</strong>". Try "Block 34", "38", or "Library".</div>`
+                : matches.map(item => `
+                    <button type="button" onclick="selectAutocompleteItem('${item.id}')" class="w-full text-left px-4 py-3 hover:bg-orange-50 transition-colors flex items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 rounded ${item.isLiveOsm ? 'bg-indigo-600' : 'bg-slate-900'} text-white font-mono text-[11px] font-bold">${item.number}</span>
+                                <span class="font-bold text-sm text-slate-900">${escapeHtml(item.name)}</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-0.5 truncate max-w-md">${escapeHtml(item.landmarkCue)}</p>
+                        </div>
+                        <span class="text-xs font-bold text-orange-600 shrink-0">Go &rarr;</span>
+                    </button>
+                `).join('');
+            dropdown.classList.remove('hidden');
+        }
+
+        function selectAutocompleteItem(destId) {
+            const item = getAllDestinations().find(b => b.id === destId);
+            if (!item) return;
+            appState.selectedDestId = item.id;
+            appState.selectedRoomCode = (item.sampleRooms && item.sampleRooms[0] !== 'N/A') ? item.sampleRooms[0] : `${item.number}-101`;
+            document.getElementById('destination-input').value = item.name;
+            updateClearButtonVisibility();
+            document.getElementById('autocomplete-dropdown').classList.add('hidden');
+            executeRouteSearch(true);
+        }
+
+        function quickSelectDestination(destId, roomCode = null) {
+            const item = getAllDestinations().find(b => b.id === destId);
+            if (!item) return;
+            appState.selectedDestId = item.id;
+            appState.selectedRoomCode = roomCode || (item.sampleRooms && item.sampleRooms[0] !== 'N/A' ? item.sampleRooms[0] : `${item.number}-101`);
+            document.getElementById('destination-input').value = roomCode ? `${item.shortName} (Room ${roomCode})` : item.name;
+            updateClearButtonVisibility();
+            executeRouteSearch(true);
+        }
+
+        function selectMapOrigin(gateId) {
+            appState.selectedOriginId = gateId;
+            appState.customGpsOrigin = null;
+            document.getElementById('origin-select').value = gateId;
+            renderMapStaticMarkers();
+            executeRouteSearch(false);
+        }
+
+        async function executeRouteSearch(shouldScroll = true) {
+            const rawInput = document.getElementById('destination-input').value.trim().toLowerCase();
+            if (rawInput) {
+                const roomMatch = rawInput.match(/\b(\d{1,2})-(\d{3})\b/);
+                if (roomMatch) {
+                    const blk = CAMPUS_CONFIG.blocks.find(b => b.number === roomMatch[1]);
+                    if (blk) {
+                        appState.selectedDestId = blk.id;
+                        appState.selectedRoomCode = roomMatch[0];
+                    }
+                } else {
+                    const direct = getAllDestinations().find(b =>
+                        b.name.toLowerCase().includes(rawInput) ||
+                        b.shortName.toLowerCase().includes(rawInput) ||
+                        `block ${b.number}` === rawInput ||
+                        b.number.toLowerCase() === rawInput
+                    );
+                    if (direct) appState.selectedDestId = direct.id;
+                }
+            }
+
+            const origin = getActiveOrigin();
+            const dest = getAllDestinations().find(b => b.id === appState.selectedDestId) || CAMPUS_CONFIG.blocks[0];
+            const uniHospitalStand = CAMPUS_CONFIG.gates.find(g => g.id === 'unihospital');
+
+            document.getElementById('map-route-loader').classList.remove('hidden');
+
+            // Fetch live OSRM walking route & UniHospital Golf Cart express route
+            const walkRoute = await CampusApiService.fetchOsrmRoute(
+                { lat: origin.lat, lng: origin.lng },
+                { lat: dest.lat, lng: dest.lng },
+                'foot'
+            );
+
+            // Cart express leg starts from UniHospital Hub (or origin if already at UniHospital)
+            const cartStartCoords = origin.id === 'unihospital'
+                ? { lat: origin.lat, lng: origin.lng }
+                : { lat: uniHospitalStand.lat, lng: uniHospitalStand.lng };
+
+            const cartLegRoute = await CampusApiService.fetchOsrmRoute(
+                cartStartCoords,
+                { lat: dest.lat, lng: dest.lng },
+                'driving'
+            );
+
+            document.getElementById('map-route-loader').classList.add('hidden');
+            updateInspectorDisplay();
+
+            // Calculate realistic Campus E-Cart travel time (~18 km/h campus speed limit)
+            const cartRideMins = Math.max(2, Math.ceil(cartLegRoute.distanceMeters / 280));
+            const walkToHubDist = origin.id === 'unihospital' ? 0 : Math.round(haversineMeters(origin, uniHospitalStand));
+            const walkToHubMins = walkToHubDist === 0 ? 0 : Math.max(1, Math.ceil(walkToHubDist / 75));
+            const totalCartJourneyMins = cartRideMins + walkToHubMins;
+
+            // Build multimodal steps for E-Cart
+            const cartSteps = [];
+            if (origin.id !== 'unihospital') {
+                cartSteps.push({
+                    title: `Walk to UniHospital Cart Stand (${walkToHubMins} min)`,
+                    detail: `From ${origin.shortName}, walk ${walkToHubDist} m toward the UniHospital Main Gate Plaza where Eco-Carts line up.`,
+                    landmark: 'UniHospital Cart Hub'
+                });
+            }
+            cartSteps.push({
+                title: `Board LPU Eco-Cart (₹15 Ticket)`,
+                detail: `Scan your digital QR pass with the cart captain at UniHospital Stand. Carts depart every 3–4 minutes.`,
+                landmark: 'UniHospital Boarding Bay'
+            });
+            cartSteps.push({
+                title: `Ride Express Shuttle to ${dest.shortName} (${cartRideMins} min)`,
+                detail: `Follow the paved campus avenue (${cartLegRoute.distanceMeters} m) directly to the ${dest.shortName} drop-off point.`,
+                landmark: dest.landmarkCue
+            });
+            cartSteps.push({
+                title: `Alight at ${dest.shortName} Entrance`,
+                detail: `Step off at the nearest plaza and follow indoor floor signs to Room ${appState.selectedRoomCode}.`,
+                landmark: `${dest.shortName} Plaza`
+            });
+
+            appState.lastWalkRoute = walkRoute;
+            appState.lastCartRoute = {
+                ...cartLegRoute,
+                totalMins: totalCartJourneyMins,
+                cartRideMins,
+                walkToHubMins,
+                steps: cartSteps
+            };
+
+            // Update Intelligent Golf Cart Recommendation Banner
+            updateGolfCartRecommendationBanner(origin, dest, walkRoute, appState.lastCartRoute);
+
+            // Update Summary Card
+            document.getElementById('res-block-badge').textContent = dest.isLiveOsm ? 'LIVE OSM' : `BLOCK ${dest.number}`;
+            document.getElementById('res-dest-title').textContent = dest.name;
+            document.getElementById('res-origin-name').textContent = origin.shortName;
+            document.getElementById('res-dest-short').textContent = dest.shortName;
+            document.getElementById('res-landmark-cue').textContent = `Cue: ${dest.landmarkCue}`;
+            document.getElementById('res-access-badge').innerHTML = `<i data-lucide="accessibility" class="w-3.5 h-3.5 text-emerald-600"></i> ${dest.accessibility}`;
+
+            // Draw Polylines on Leaflet Map (Orange = Walk, Dashed Emerald = UniHospital Cart Path)
+            routeLayerGroup.clearLayers();
+            renderMapStaticMarkers();
+
+            const walkPolyline = L.polyline(walkRoute.latLngs, {
+                color: '#EA580C',
+                weight: 5,
+                opacity: 0.9,
+                lineCap: 'round'
+            }).addTo(routeLayerGroup);
+
+            const cartPolyline = L.polyline(cartLegRoute.latLngs, {
+                color: '#059669',
+                weight: 5,
+                opacity: 0.9,
+                dashArray: '10, 8',
+                lineCap: 'round'
+            }).addTo(routeLayerGroup);
+
+            const groupBounds = L.featureGroup([walkPolyline, cartPolyline]).getBounds().pad(0.25);
+            currentRouteBounds = groupBounds;
+            leafletMap.fitBounds(groupBounds);
+
+            // Render Steps & Room Decoder
+            renderStepsList();
+            updateRoomDecoderBlock(dest);
+            updateShareableDeepLink(origin.id, dest.id, appState.selectedRoomCode);
+            lucide.createIcons();
+
+            if (shouldScroll) {
+                document.getElementById('navigation-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function updateGolfCartRecommendationBanner(origin, dest, walkRoute, cartRoute) {
+            const isLongWalk = walkRoute.distanceMeters >= 380 || origin.id === 'unihospital' || dest.cartRecommended;
+            const badge = document.getElementById('cart-rec-badge');
+            const headline = document.getElementById('cart-rec-headline');
+            const subtext = document.getElementById('cart-rec-subtext');
+            const multiText = document.getElementById('cart-multimodal-text');
+
+            document.getElementById('comp-walk-time').textContent = `${walkRoute.durationMins} min`;
+            document.getElementById('comp-walk-dist').textContent = `${walkRoute.distanceMeters} m • Free`;
+            document.getElementById('comp-cart-time').textContent = `${cartRoute.totalMins} min`;
+
+            if (dest.id === 'unihospital_dest' && origin.id === 'unihospital') {
+                badge.innerHTML = `<i data-lucide="car-front" class="w-3.5 h-3.5"></i> You Are at the Cart Hub`;
+                headline.textContent = `You are right at the UniHospital Main Golf Cart Stand!`;
+                subtext.textContent = `Board an electric cart here for ₹15 flat fare to Block 34, Block 38, Central Library, or any Hostel Zone.`;
+                multiText.textContent = `Origin: UniHospital Cart Hub • Select any destination block to book a ₹15 seat`;
+            } else if (isLongWalk) {
+                const minsSaved = Math.max(2, walkRoute.durationMins - cartRoute.totalMins);
+                badge.innerHTML = `<i data-lucide="zap" class="w-3.5 h-3.5 fill-slate-950"></i> Recommended • Save ~${minsSaved} Mins`;
+                headline.textContent = origin.id === 'unihospital'
+                    ? `Board the ₹15 Golf Cart right here at UniHospital to reach ${dest.shortName} in ${cartRoute.cartRideMins} mins!`
+                    : `Save ${minsSaved} mins! Hop on the UniHospital ₹15 Golf Cart to ${dest.shortName}.`;
+                subtext.textContent = `Electric buggies depart every 3–4 mins from the UniHospital Stand. Avoid heat, heavy bags, and long walks across campus.`;
+                multiText.textContent = origin.id === 'unihospital'
+                    ? `Direct Boarding: UniHospital Stand → Express Drop at ${dest.shortName} (${cartRoute.distanceMeters} m)`
+                    : `2-Leg Smart Trip: Walk ${cartRoute.walkToHubMins} min to UniHospital Stand → Ride E-Cart (${cartRoute.cartRideMins} min) to ${dest.shortName}`;
+            } else {
+                badge.innerHTML = `<i data-lucide="footprints" class="w-3.5 h-3.5"></i> Short Walk • Cart Also Available`;
+                headline.textContent = `${dest.shortName} is a short ${walkRoute.durationMins}-min walk (${walkRoute.distanceMeters} m) — or take a ₹15 Cart.`;
+                subtext.textContent = `Walking is quick for this distance, though UniHospital Eco-Carts remain available if you are with parents or carrying luggage.`;
+                multiText.textContent = `Optional Shuttle: UniHospital Stand → ${dest.shortName} • ₹15 flat fare`;
+            }
+        }
+
+        function setStepsViewMode(mode) {
+            appState.stepsViewMode = mode;
+            const cartBtn = document.getElementById('steps-mode-cart');
+            const walkBtn = document.getElementById('steps-mode-walk');
+
+            if (mode === 'cart') {
+                cartBtn.className = 'py-2 px-3 rounded-lg text-xs font-bold bg-white text-emerald-700 shadow-xs flex items-center justify-center gap-1.5 transition-all';
+                walkBtn.className = 'py-2 px-3 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition-all';
+            } else {
+                walkBtn.className = 'py-2 px-3 rounded-lg text-xs font-bold bg-white text-orange-700 shadow-xs flex items-center justify-center gap-1.5 transition-all';
+                cartBtn.className = 'py-2 px-3 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition-all';
+            }
+            renderStepsList();
+            lucide.createIcons();
+        }
+
+        function renderStepsList() {
+            const listEl = document.getElementById('directions-steps-list');
+            const activeData = appState.stepsViewMode === 'cart' ? appState.lastCartRoute : appState.lastWalkRoute;
+            if (!activeData) return;
+
+            const steps = activeData.steps || [];
+            document.getElementById('step-count-badge').textContent = `${steps.length} Steps`;
+            document.getElementById('steps-subtitle').textContent = appState.stepsViewMode === 'cart'
+                ? 'UniHospital Eco-Cart boarding & drop-off steps'
+                : 'Live OSRM pedestrian road instructions';
+
+            const accentBg = appState.stepsViewMode === 'cart' ? 'bg-emerald-600' : 'bg-orange-600';
+
+            listEl.innerHTML = steps.map((step, idx) => {
+                const isLast = idx === steps.length - 1;
+                return `
+                    <li class="relative pl-10 pb-1">
+                        ${!isLast ? '<span class="absolute left-4 top-8 bottom-0 w-0.5 bg-slate-200"></span>' : ''}
+                        <span class="absolute left-0 top-0.5 w-8 h-8 rounded-full ${isLast ? accentBg : 'bg-slate-900'} text-white font-extrabold text-xs flex items-center justify-center shadow-xs">
+                            ${idx + 1}
+                        </span>
+                        <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200/80">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                                <h4 class="font-bold text-sm text-slate-900">${escapeHtml(step.title)}</h4>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[11px] font-semibold text-slate-600">
+                                    <i data-lucide="map-pin" class="w-3 h-3 text-orange-500"></i>
+                                    ${escapeHtml(step.landmark)}
+                                </span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${escapeHtml(step.detail)}</p>
+                        </div>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        function recenterCampusMap() {
+            if (currentRouteBounds) leafletMap.fitBounds(currentRouteBounds);
+            else leafletMap.setView(CAMPUS_CONFIG.center, CAMPUS_CONFIG.defaultZoom);
+        }
+
+        /**
+         * INSIDE-BLOCK ROOM DECODER
+         */
+        function updateRoomDecoderBlock(dest) {
+            document.getElementById('room-helper-block-label').textContent = dest.shortName;
+            const sample = (dest.sampleRooms && dest.sampleRooms[0] !== 'N/A') ? dest.sampleRooms[0] : `${dest.number}-101`;
+            if (!appState.selectedRoomCode.startsWith(`${dest.number}-`)) {
+                appState.selectedRoomCode = sample;
+            }
+            document.getElementById('room-code-input').value = appState.selectedRoomCode;
+            decodeRoomLocation();
+        }
+
+        function decodeRoomLocation() {
+            const raw = document.getElementById('room-code-input').value.trim().toUpperCase();
+            const dest = getAllDestinations().find(b => b.id === appState.selectedDestId) || CAMPUS_CONFIG.blocks[0];
+            const badgeEl = document.getElementById('room-floor-badge');
+            const textEl = document.getElementById('room-decoded-text');
+
+            if (dest.isLiveOsm) {
+                badgeEl.textContent = 'OSM';
+                textEl.innerHTML = `<p><strong>${escapeHtml(dest.shortName)}:</strong> External OpenStreetMap building pin. Follow main reception signage at entrance.</p>`;
+                return;
+            }
+
+            appState.selectedRoomCode = raw || `${dest.number}-101`;
+            const parts = appState.selectedRoomCode.split('-');
+            const digits = (parts.length > 1 ? parts[1] : parts[0]).replace(/\D/g, '');
+
+            if (digits.length >= 3) {
+                const floorDigit = parseInt(digits[0], 10);
+                const roomNum = parseInt(digits.slice(1), 10);
+                const floorName = floorDigit === 0 ? 'Ground Floor' : `${ordinalSuffix(floorDigit)} Floor`;
+                const wing = roomNum <= 12 ? dest.wingGuide.east : dest.wingGuide.west;
+                const indoorMins = floorDigit === 0 ? '1 min' : `${floorDigit + 1} mins`;
+
+                badgeEl.textContent = floorDigit === 0 ? 'GF' : `${floorDigit}F`;
+                textEl.innerHTML = `
+                    <p class="font-bold text-slate-900">Room ${escapeHtml(appState.selectedRoomCode)} &bull; ${dest.shortName}</p>
+                    <p><strong>Level &amp; Wing:</strong> ${floorName} &rarr; ${wing}</p>
+                    <p class="text-xs text-slate-500"><strong>Indoor Access:</strong> Enter main porch, use Elevator A or central stairwell (~${indoorMins} from entrance).</p>
+                `;
+            } else {
+                badgeEl.textContent = 'INFO';
+                textEl.innerHTML = `<p><strong>${escapeHtml(appState.selectedRoomCode)}:</strong> Check the ground-floor directory board inside <strong>${dest.shortName}</strong> (${dest.wingGuide.east}).</p>`;
+            }
+        }
+
+        /**
+         * 4. LPU GOLF CART TICKET & PASS BOOKING SYSTEM
+         */
+        function populateCartDropoffDropdown() {
+            const select = document.getElementById('cart-dropoff-select');
+            select.innerHTML = CAMPUS_CONFIG.blocks
+                .filter(b => b.id !== 'unihospital_dest')
+                .map(b => `<option value="${b.id}">${b.shortName} — ${b.categoryLabel}</option>`)
+                .join('');
+        }
+
+        function openCartBookingModal(pickupId = null, dropoffId = null) {
+            const pickupSel = document.getElementById('cart-pickup-select');
+            const dropoffSel = document.getElementById('cart-dropoff-select');
+
+            pickupSel.value = pickupId || (CAMPUS_CONFIG.gates.some(g => g.id === appState.selectedOriginId && g.isCartStand) ? appState.selectedOriginId : 'unihospital');
+
+            const targetDest = dropoffId || appState.selectedDestId;
+            if (Array.from(dropoffSel.options).some(o => o.value === targetDest)) {
+                dropoffSel.value = targetDest;
+            } else {
+                dropoffSel.value = 'block_34';
+            }
+
+            // Show Form View, hide Receipt View
+            document.getElementById('cart-booking-form-view').classList.remove('hidden');
+            document.getElementById('cart-ticket-receipt-view').classList.add('hidden');
+            updateCartFareSummary();
+
+            document.getElementById('cart-booking-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeCartBookingModal() {
+            document.getElementById('cart-booking-modal').classList.add('hidden');
+        }
+
+        function selectCartPassType(type) {
+            appState.cartPassType = type;
+            const singleBtn = document.getElementById('pass-type-single');
+            const dayBtn = document.getElementById('pass-type-day');
+
+            if (type === 'single') {
+                singleBtn.className = 'p-3 rounded-2xl border-2 border-emerald-500 bg-emerald-50/70 text-left transition-all';
+                dayBtn.className = 'p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition-all';
+            } else {
+                dayBtn.className = 'p-3 rounded-2xl border-2 border-indigo-500 bg-indigo-50/70 text-left transition-all';
+                singleBtn.className = 'p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left transition-all';
+            }
+            updateCartFareSummary();
+        }
+
+        function changeCartSeats(delta) {
+            appState.cartSeats = Math.min(4, Math.max(1, appState.cartSeats + delta));
+            document.getElementById('cart-seat-count').textContent = appState.cartSeats;
+            updateCartFareSummary();
+        }
+
+        function selectPaymentMethod(method) {
+            appState.cartPaymentMethod = method;
+            document.querySelectorAll('.pay-method-btn').forEach(btn => {
+                btn.className = 'pay-method-btn py-2 px-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 font-semibold text-xs text-center';
+            });
+            document.getElementById(`pay-method-${method}`).className = 'pay-method-btn py-2 px-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-xs text-center';
+        }
+
+        function updateCartFareSummary() {
+            const unitPrice = appState.cartPassType === 'single' ? CAMPUS_CONFIG.cartFareSingle : CAMPUS_CONFIG.cartFareDay;
+            const total = unitPrice * appState.cartSeats;
+            document.getElementById('cart-total-fare').textContent = `₹${total}`;
+        }
+
+        function processCartTicketPayment() {
+            const btn = document.getElementById('cart-pay-submit-btn');
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span><span>Authorizing...</span>`;
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+
+                const pickupSel = document.getElementById('cart-pickup-select');
+                const dropoffSel = document.getElementById('cart-dropoff-select');
+                const riderName = document.getElementById('cart-rider-name').value.trim() || 'LPU Rider';
+
+                const unitPrice = appState.cartPassType === 'single' ? CAMPUS_CONFIG.cartFareSingle : CAMPUS_CONFIG.cartFareDay;
+                const totalFare = unitPrice * appState.cartSeats;
+                const ticketId = `LPU-CART-${Math.floor(1000 + Math.random() * 9000)}`;
+
+                const newPass = {
+                    id: ticketId,
+                    pickupLabel: pickupSel.options[pickupSel.selectedIndex].text.split(' (')[0],
+                    dropoffId: dropoffSel.value,
+                    dropoffLabel: dropoffSel.options[dropoffSel.selectedIndex].text.split(' —')[0],
+                    passType: appState.cartPassType === 'single' ? 'Single Ride' : 'Day Hopper',
+                    seats: appState.cartSeats,
+                    fare: totalFare,
+                    rider: riderName,
+                    createdAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    expiresAt: Date.now() + 15 * 60 * 1000,
+                    status: 'ACTIVE'
+                };
+
+                appState.savedPasses.unshift(newPass);
+                persistPassesToStorage();
+                showDigitalBoardingPass(newPass);
+                showToast(`Eco-Cart Pass ${ticketId} booked (₹${totalFare})!`);
+            }, 650);
+        }
+
+        function showDigitalBoardingPass(pass) {
+            document.getElementById('cart-booking-form-view').classList.add('hidden');
+            document.getElementById('cart-ticket-receipt-view').classList.remove('hidden');
+
+            document.getElementById('receipt-ticket-id').textContent = pass.id;
+            document.getElementById('receipt-pickup').textContent = pass.pickupLabel;
+            document.getElementById('receipt-dropoff').textContent = pass.dropoffLabel;
+            document.getElementById('receipt-meta').textContent = `${pass.seats} Seat(s) • ${pass.passType} • Paid ₹${pass.fare}`;
+
+            clearInterval(countdownInterval);
+            const updateTimer = () => {
+                const diff = Math.max(0, pass.expiresAt - Date.now());
+                const mins = String(Math.floor(diff / 60000)).padStart(2, '0');
+                const secs = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+                document.getElementById('receipt-countdown').textContent = diff > 0 ? `${mins}:${secs}` : 'EXPIRED';
+            };
+            updateTimer();
+            countdownInterval = setInterval(updateTimer, 1000);
+            lucide.createIcons();
+        }
+
+        function simulateDriverScan() {
+            const currentId = document.getElementById('receipt-ticket-id').textContent;
+            const pass = appState.savedPasses.find(p => p.id === currentId);
+            if (pass) {
+                pass.status = 'BOARDED';
+                persistPassesToStorage();
+            }
+            closeCartBookingModal();
+            showToast(`Driver Verified Pass ${currentId}! Enjoy your ride.`);
+        }
+
+        function loadSavedPassesFromStorage() {
+            try {
+                const raw = localStorage.getItem('lpu_eco_cart_passes');
+                appState.savedPasses = raw ? JSON.parse(raw) : [];
+            } catch {
+                appState.savedPasses = [];
+            }
+            updateHeaderPassBadge();
+        }
+
+        function persistPassesToStorage() {
+            try {
+                localStorage.setItem('lpu_eco_cart_passes', JSON.stringify(appState.savedPasses.slice(0, 15)));
+            } catch {}
+            updateHeaderPassBadge();
+        }
+
+        function updateHeaderPassBadge() {
+            const activeCount = appState.savedPasses.filter(p => p.status === 'ACTIVE').length;
+            document.getElementById('header-pass-count').textContent = activeCount || appState.savedPasses.length;
+        }
+
+        function openPassesDrawer() {
+            const list = document.getElementById('passes-drawer-list');
+            if (appState.savedPasses.length === 0) {
+                list.innerHTML = `
+                    <div class="bg-white rounded-3xl border border-slate-200 p-8 text-center space-y-2">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+                            <i data-lucide="ticket" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900">No Eco-Cart Passes Yet</h4>
+                        <p class="text-xs text-slate-500">Book a ₹15 Golf Cart ride from UniHospital to Block 34 or any campus hub.</p>
+                    </div>
+                `;
+            } else {
+                list.innerHTML = appState.savedPasses.map(p => `
+                    <div class="bg-white rounded-2xl border ${p.status === 'ACTIVE' ? 'border-emerald-300 shadow-xs' : 'border-slate-200 opacity-80'} p-4 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono font-extrabold text-xs text-slate-900">${p.id}</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold ${p.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">
+                                ${p.status}
+                            </span>
+                        </div>
+                        <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                            <span>${escapeHtml(p.pickupLabel)}</span>
+                            <span class="text-orange-500">&rarr;</span>
+                            <span>${escapeHtml(p.dropoffLabel)}</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100">
+                            <span>${p.seats} Seat(s) &bull; ₹${p.fare} &bull; ${p.createdAt}</span>
+                            <button onclick="viewSavedPassTicket('${p.id}')" class="font-bold text-emerald-700 hover:underline">
+                                View QR &rarr;
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            document.getElementById('passes-drawer').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closePassesDrawer() {
+            document.getElementById('passes-drawer').classList.add('hidden');
+        }
+
+        function viewSavedPassTicket(passId) {
+            const pass = appState.savedPasses.find(p => p.id === passId);
+            if (!pass) return;
+            closePassesDrawer();
+            document.getElementById('cart-booking-modal').classList.remove('hidden');
+            showDigitalBoardingPass(pass);
+        }
+
+        /**
+         * PERSONAS, DIRECTORY, QR SIMULATOR & INSPECTOR
+         */
+        function setUserRole(role) {
+            appState.activeRole = role;
+            document.querySelectorAll('.role-tab').forEach(btn => {
+                btn.className = 'role-tab flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-slate-700 border border-slate-200 hover:border-orange-300';
+            });
+            document.getElementById(`role-btn-${role}`).className = 'role-tab flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-slate-900 text-white shadow-sm';
+
+            const tip = document.getElementById('role-tip-text');
+            const btn = document.getElementById('role-quick-action');
+            if (role === 'student') {
+                tip.innerHTML = `<strong class="text-slate-900">Student Tip:</strong> Walking from <strong>UniHospital</strong> to <strong>Block 34</strong> or Hostels? Take the <strong>₹15 Electric Golf Cart</strong> from the UniHospital Stand to save 12+ minutes!`;
+                btn.textContent = 'Try UniHospital → Block 34';
+            } else if (role === 'parent') {
+                tip.innerHTML = `<strong class="text-slate-900">Parent &amp; Visitor Tip:</strong> Enter via <strong>Main Gate (NH-44)</strong> for visitor passes. Multi-seat <strong>₹15 Golf Carts</strong> are available at UniHospital Stand for comfortable campus tours.`;
+                btn.textContent = 'Route to Admissions (Block 30)';
+            } else {
+                tip.innerHTML = `<strong class="text-slate-900">Delivery Partner Tip:</strong> Handover parcels at <strong>Gate 3 (BH-1)</strong>, <strong>Gate 4 (GH)</strong>, or the <strong>UniHospital / UniMall Plaza</strong> drop bays.`;
+                btn.textContent = 'Route to Boys Hostel Gate';
+            }
+        }
+
+        function applyRolePreset() {
+            appState.customGpsOrigin = null;
+            if (appState.activeRole === 'student') {
+                appState.selectedOriginId = 'unihospital';
+                document.getElementById('origin-select').value = 'unihospital';
+                quickSelectDestination('block_34', '34-204');
+            } else if (appState.activeRole === 'parent') {
+                appState.selectedOriginId = 'main_gate';
+                document.getElementById('origin-select').value = 'main_gate';
+                quickSelectDestination('block_30');
+            } else {
+                appState.selectedOriginId = 'gate_3';
+                document.getElementById('origin-select').value = 'gate_3';
+                quickSelectDestination('bh_zone');
+            }
+        }
+
+        function setDirectoryCategory(cat) {
+            appState.directoryCategory = cat;
+            document.querySelectorAll('.dir-cat-btn').forEach(btn => {
+                btn.className = btn.dataset.cat === cat
+                    ? 'dir-cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-900 text-white whitespace-nowrap transition-all'
+                    : 'dir-cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 whitespace-nowrap transition-all';
+            });
+            renderDirectoryCards();
+        }
+
+        function renderDirectoryCards() {
+            const grid = document.getElementById('directory-cards-grid');
+            const query = document.getElementById('directory-search-input').value.toLowerCase().trim();
+            const items = [...CAMPUS_CONFIG.blocks, ...appState.liveOsmPois].filter(item => {
+                if (appState.directoryCategory !== 'all' && item.category !== appState.directoryCategory) return false;
+                if (!query) return true;
+                return [item.number, `block ${item.number}`, item.name, item.categoryLabel, item.landmarkCue, ...(item.departments || [])]
+                    .join(' ').toLowerCase().includes(query);
+            });
+
+            grid.innerHTML = items.length === 0
+                ? `<div class="col-span-full bg-slate-50 border border-slate-200 rounded-3xl p-8 text-center text-sm text-slate-600">No matching blocks found.</div>`
+                : items.slice(0, 18).map(item => `
+                    <div class="group bg-white rounded-3xl border ${item.featured ? 'border-orange-300 ring-2 ring-orange-500/10' : 'border-slate-200'} p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <span class="px-2.5 py-1 rounded-xl ${item.featured ? 'bg-orange-600 text-white' : (item.isLiveOsm ? 'bg-indigo-600 text-white' : 'bg-slate-900 text-white')} font-mono text-xs font-extrabold">
+                                    ${item.isLiveOsm ? 'LIVE OSM' : (/^\d+$/.test(item.number) ? 'BLOCK ' + item.number : item.number)}
+                                </span>
+                                <span class="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600">
+                                    ${escapeHtml(item.categoryLabel)}
+                                </span>
+                            </div>
+                            <h3 class="font-display font-extrabold text-base sm:text-lg text-slate-900 group-hover:text-orange-600 transition-colors">
+                                ${escapeHtml(item.name)}
+                            </h3>
+                            <p class="mt-1.5 text-xs text-slate-600 flex items-start gap-1.5">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-orange-500 shrink-0 mt-0.5"></i>
+                                <span>${escapeHtml(item.landmarkCue)}</span>
+                            </p>
+                            <div class="mt-3 flex flex-wrap gap-1.5">
+                                ${(item.departments || []).map(d => `<span class="px-2 py-0.5 rounded-md bg-slate-50 border border-slate-200/80 text-[11px] text-slate-700">${escapeHtml(d)}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <button onclick="quickSelectDestination('${item.id}')" class="flex-1 py-2 px-3 rounded-xl bg-orange-50 hover:bg-orange-600 text-orange-700 hover:text-white font-bold text-xs transition-colors">
+                                Navigate Here
+                            </button>
+                            ${item.id !== 'unihospital_dest' ? `
+                                <button onclick="openCartBookingModal('unihospital', '${item.id}')" class="py-2 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white font-bold text-xs transition-colors">
+                                    ₹15 Cart
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            lucide.createIcons();
+        }
+
+        function populateQrCheckpoints() {
+            document.getElementById('qr-checkpoints-list').innerHTML = CAMPUS_CONFIG.gates.map(gate => `
+                <button onclick="simulateQrScan('${gate.id}')" class="w-full text-left p-3 rounded-2xl border border-slate-200 hover:border-orange-500 hover:bg-orange-50/50 transition-all flex items-center justify-between gap-3 group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-slate-900 group-hover:bg-orange-600 text-white flex items-center justify-center shrink-0">
+                            <i data-lucide="qr-code" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-xs sm:text-sm text-slate-900">${gate.qrCodeLabel}</div>
+                            <div class="text-[11px] text-slate-500">${gate.name}</div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-orange-600 shrink-0">Scan &rarr;</span>
+                </button>
+            `).join('');
+        }
+
+        function openQrModal() {
+            document.getElementById('qr-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeQrModal() {
+            document.getElementById('qr-modal').classList.add('hidden');
+        }
+
+        function simulateQrScan(gateId) {
+            appState.selectedOriginId = gateId;
+            appState.customGpsOrigin = null;
+            appState.qrVerified = true;
+            document.getElementById('origin-select').value = gateId;
+            document.getElementById('qr-badge-indicator').classList.remove('hidden');
+            closeQrModal();
+            executeRouteSearch(true);
+            const gate = CAMPUS_CONFIG.gates.find(g => g.id === gateId);
+            showToast(`QR Scanned at ${gate.shortName}!`);
+        }
+
+        function updateShareableDeepLink(fromId, toId, room) {
+            const base = window.location.origin + window.location.pathname;
+            const url = `${base}?from=${encodeURIComponent(fromId)}&to=${encodeURIComponent(toId)}&room=${encodeURIComponent(room)}`;
+            const box = document.getElementById('qr-deeplink-url');
+            if (box) box.value = url;
+        }
+
+        function copyDeepLinkUrl() {
+            const box = document.getElementById('qr-deeplink-url');
+            box.select();
+            document.execCommand('copy');
+            showToast('Shareable QR deep-link URL copied!');
+        }
+
+        function copyDirectionsToClipboard() {
+            const origin = getActiveOrigin();
+            const dest = getAllDestinations().find(b => b.id === appState.selectedDestId) || CAMPUS_CONFIG.blocks[0];
+            const walkTime = document.getElementById('comp-walk-time').textContent;
+            const cartTime = document.getElementById('comp-cart-time').textContent;
+
+            const text = [
+                `📍 Which Block Is 34? — LPU Route`,
+                `From: ${origin.name}`,
+                `To: ${dest.name} (Room: ${appState.selectedRoomCode})`,
+                `🚶 Walk: ${walkTime} | ⚡ UniHospital E-Cart (₹15): ${cartTime}`,
+                `Landmark: ${dest.landmarkCue}`
+            ].join('\n');
+
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast('Directions copied for WhatsApp!');
+        }
+
+        function toggleApiInspector(force = null) {
+            const drawer = document.getElementById('api-inspector-drawer');
+            const show = force !== null ? force : drawer.classList.contains('hidden');
+            drawer.classList.toggle('hidden', !show);
+            if (show) updateInspectorDisplay();
+        }
+
+        function switchInspectorTab(tab) {
+            appState.inspectorTab = tab;
+            document.getElementById('insp-tab-osrm').className = tab === 'osrm'
+                ? 'px-2.5 py-1 rounded-lg bg-orange-600 text-white font-mono text-xs font-bold'
+                : 'px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 font-mono text-xs font-bold';
+            document.getElementById('insp-tab-overpass').className = tab === 'overpass'
+                ? 'px-2.5 py-1 rounded-lg bg-orange-600 text-white font-mono text-xs font-bold'
+                : 'px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 font-mono text-xs font-bold';
+            updateInspectorDisplay();
+        }
+
+        function updateInspectorDisplay() {
+            document.getElementById('api-latency-badge').textContent = `Latency: ${CampusApiService.lastLatencyMs} ms`;
+            if (appState.inspectorTab === 'osrm') {
+                document.getElementById('inspector-endpoint-url').textContent = CampusApiService.lastOsrmUrl;
+                document.getElementById('inspector-json-output').textContent = JSON.stringify(CampusApiService.lastOsrmPayload || {}, null, 2);
+            } else {
+                document.getElementById('inspector-endpoint-url').textContent = CampusApiService.lastOverpassUrl;
+                document.getElementById('inspector-json-output').textContent = JSON.stringify(CampusApiService.lastOverpassPayload || {}, null, 2);
+            }
+        }
+
+        /**
+         * UTILITIES
+         */
+        function buildHumanInstruction(step, roadName, isLast) {
+            const type = step.maneuver?.type || '';
+            const mod = step.maneuver?.modifier || '';
+            if (isLast || type === 'arrive') return { title: 'Arrive at Destination', detail: `Arrive along ${roadName}. Check block entrance signage.` };
+            if (type === 'depart') return { title: `Start on ${roadName}`, detail: `Head ${mod || 'forward'} along ${roadName} for ${Math.round(step.distance)} m.` };
+            const turn = mod ? `Turn ${mod}` : 'Continue';
+            return { title: `${capitalizeWord(turn)} onto ${roadName}`, detail: `${capitalizeWord(turn)} and proceed ${Math.round(step.distance)} m along ${roadName}.` };
+        }
+
+        function haversineMeters(c1, c2) {
+            const R = 6371000;
+            const dLat = (c2.lat - c1.lat) * Math.PI / 180;
+            const dLon = (c2.lng - c1.lng) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) ** 2 + Math.cos(c1.lat * Math.PI / 180) * Math.cos(c2.lat * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        }
+
+        function ordinalSuffix(n) {
+            const s = ['th', 'st', 'nd', 'rd'];
+            const v = n % 100;
+            return n + (s[(v - 20) % 10] || s[v] || s[0]);
+        }
+
+        function capitalizeWord(str) {
+            return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+        }
+
+        let toastTimer;
+        function showToast(msg) {
+            const el = document.getElementById('toast-notification');
+            document.getElementById('toast-message').textContent = msg;
+            el.classList.remove('translate-y-24', 'opacity-0');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.add('translate-y-24', 'opacity-0'), 3400);
+        }
+
+        function escapeHtml(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+    </script>
+</body>
+</html>
